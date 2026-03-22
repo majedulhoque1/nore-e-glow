@@ -13,8 +13,30 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Cormorant Garamond', 'serif'],
+        body: ['DM Sans', 'sans-serif'],
+      },
       colors: {
-        border: "hsl(var(--border))",
+        gold: {
+          DEFAULT: '#C9A052',
+          light: '#E8C97A',
+          dark: '#A07830',
+        },
+        crimson: {
+          DEFAULT: '#8B1A2A',
+          light: '#B52235',
+        },
+        ivory: {
+          DEFAULT: '#FAF5EB',
+          warm: '#F5EDE0',
+        },
+        bark: {
+          DEFAULT: '#1C1917',
+          mid: '#6B5E52',
+          muted: '#A89880',
+        },
+        border: '#E8DDD0',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -65,25 +87,28 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(16px)", filter: "blur(4px)" },
+          "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0px)" },
+        },
+        "scale-check": {
+          "0%": { transform: "scale(0)" },
+          "50%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in-up": "fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "scale-check": "scale-check 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
       },
     },
   },
