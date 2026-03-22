@@ -15,7 +15,7 @@ const TrustBar = () => (
     transition={{ duration: 0.5 }}
     className="bg-ivory-warm border-y border-border py-5 px-6"
   >
-    <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-center gap-8 md:gap-12">
+    <div className="max-w-[1400px] mx-auto hidden md:flex md:flex-row items-center justify-center gap-12">
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-2.5">
           <item.icon size={18} className="text-gold" />
