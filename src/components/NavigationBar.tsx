@@ -19,6 +19,9 @@ const NavigationBar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (href: string) => location.pathname === href;
 
   return (
     <>
