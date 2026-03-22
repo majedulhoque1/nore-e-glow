@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ShoppingBag, Menu, X } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartDrawer from './CartDrawer';
@@ -19,6 +19,9 @@ const NavigationBar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (href: string) => location.pathname === href;
 
   return (
     <>
@@ -34,7 +37,7 @@ const NavigationBar = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className="font-body text-sm text-bark-mid tracking-wide hover:text-gold transition-colors"
+                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${isActive(link.href) ? 'text-gold' : 'text-bark-mid'}`}
               >
                 {link.label}
               </Link>

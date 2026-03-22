@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
 import Index from "./pages/Index.tsx";
 import ShopPage from "./pages/ShopPage.tsx";
+import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import OrderSuccessPage from "./pages/OrderSuccessPage.tsx";
@@ -21,6 +22,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/shop" element={<ShopPage />} />
+            <Route path="/category/:slug" element={<CategoryPage />} />
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />

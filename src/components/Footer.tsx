@@ -24,8 +24,14 @@ const Footer = () => (
       <div>
         <h4 className="font-body font-medium text-xs uppercase tracking-[0.15em] text-bark-muted mb-4">Shop</h4>
         <div className="flex flex-col gap-2.5">
-          {['All Collections', 'Rings', 'Bracelets', 'Phone Charms', 'New Arrivals'].map(l => (
-            <Link key={l} to="/shop" className="font-body text-sm text-bark-muted hover:text-gold transition-colors">{l}</Link>
+          {[
+            { label: 'All Collections', href: '/shop' },
+            { label: 'Rings', href: '/category/rings' },
+            { label: 'Bracelets', href: '/category/bracelets' },
+            { label: 'Phone Charms', href: '/category/phone-charms' },
+            { label: 'New Arrivals', href: '/category/new-arrivals' },
+          ].map(l => (
+            <Link key={l.label} to={l.href} className="font-body text-sm text-bark-muted hover:text-gold transition-colors">{l.label}</Link>
           ))}
         </div>
       </div>
