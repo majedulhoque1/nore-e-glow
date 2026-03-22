@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/context/CartContext';
+import { SEOHead } from '@/components/SEOHead';
 
 const DISTRICTS = [
   'Bagerhat','Bandarban','Barguna','Barisal','Bhola','Bogura','Brahmanbaria',
