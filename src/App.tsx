@@ -21,6 +21,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/product/:slug" element={<ProductPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
