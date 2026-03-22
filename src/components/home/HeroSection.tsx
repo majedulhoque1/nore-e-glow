@@ -44,7 +44,7 @@ const HeroSection = () => (
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="font-body font-light text-base md:text-base text-sm text-white/80 max-w-[380px] leading-relaxed mt-4 mx-auto"
+        className="font-body font-light text-sm md:text-base text-white/80 max-w-[320px] md:max-w-[380px] leading-relaxed mt-4 mx-auto"
       >
         Handcrafted jewelry for the woman who adorns every moment.
       </motion.p>
