@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle, MessageCircle } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
+import { SEOHead } from '@/components/SEOHead';
 
 const OrderSuccessPage = () => {
   const navigate = useNavigate();
