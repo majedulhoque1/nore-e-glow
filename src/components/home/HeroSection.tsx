@@ -34,7 +34,7 @@ const HeroSection = () => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className="font-display italic font-light leading-[1.05] text-white max-w-[700px]"
-        style={{ fontSize: 'clamp(2.2rem, 6vw, 5.5rem)' }}
+        style={{ fontSize: 'clamp(2.2rem, 8vw, 5.5rem)' }}
       >
         Adorn yourself,<br />
         <span className="text-gold">beautifully.</span>
