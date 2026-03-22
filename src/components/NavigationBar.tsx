@@ -37,7 +37,7 @@ const NavigationBar = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className="font-body text-sm text-bark-mid tracking-wide hover:text-gold transition-colors"
+                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${isActive(link.href) ? 'text-gold' : 'text-bark-mid'}`}
               >
                 {link.label}
               </Link>
