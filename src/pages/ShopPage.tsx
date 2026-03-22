@@ -8,6 +8,7 @@ import ProductCard from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { supabase } from '@/integrations/supabase/client';
+import { SEOHead } from '@/components/SEOHead';
 
 interface Product {
   id: string;
