@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import heroImage from '@/assets/hero-editorial.jpg';
 import { motion } from 'framer-motion';
+
+const heroImage = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.34%20AM%20(1).jpeg';
 
 const HeroSection = () => (
   <section className="grid grid-cols-1 md:grid-cols-[55fr_45fr] min-h-[90vh]">
