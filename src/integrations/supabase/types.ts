@@ -14,7 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          display_order: number | null
+          id: string
+          image_url: string | null
+          name: string
+          slug: string
+        }
+        Insert: {
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name: string
+          slug: string
+        }
+        Update: {
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          address: string
+          created_at: string | null
+          customer_name: string
+          customer_phone: string
+          delivery_charge: number
+          district: string
+          id: string
+          items: Json
+          note: string | null
+          order_number: string
+          status: string | null
+          subtotal: number
+          total: number
+          upazila: string
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          customer_name: string
+          customer_phone: string
+          delivery_charge: number
+          district: string
+          id?: string
+          items: Json
+          note?: string | null
+          order_number: string
+          status?: string | null
+          subtotal: number
+          total: number
+          upazila: string
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          customer_name?: string
+          customer_phone?: string
+          delivery_charge?: number
+          district?: string
+          id?: string
+          items?: Json
+          note?: string | null
+          order_number?: string
+          status?: string | null
+          subtotal?: number
+          total?: number
+          upazila?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string
+          compare_at_price: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          images: string[]
+          is_featured: boolean | null
+          is_new_arrival: boolean | null
+          name: string
+          price: number
+          slug: string
+          stock_qty: number | null
+        }
+        Insert: {
+          category: string
+          compare_at_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          images?: string[]
+          is_featured?: boolean | null
+          is_new_arrival?: boolean | null
+          name: string
+          price: number
+          slug: string
+          stock_qty?: number | null
+        }
+        Update: {
+          category?: string
+          compare_at_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          images?: string[]
+          is_featured?: boolean | null
+          is_new_arrival?: boolean | null
+          name?: string
+          price?: number
+          slug?: string
+          stock_qty?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
