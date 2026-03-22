@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/context/CartContext';
+import { SEOHead } from '@/components/SEOHead';
 
 interface Product {
   id: string;
