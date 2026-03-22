@@ -20,6 +20,7 @@ const OrderSuccessPage = () => {
 
   return (
     <div className="min-h-screen bg-ivory flex flex-col">
+      <SEOHead title="Order Placed" url="/order-success" />
       <NavigationBar />
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 text-center">
         <motion.div

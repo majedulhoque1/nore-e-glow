@@ -110,6 +110,11 @@ const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-ivory">
+      <SEOHead
+        title="Checkout"
+        description="Complete your Nore'e Jewellery order. Cash on delivery across Bangladesh."
+        url="/checkout"
+      />
       <NavigationBar />
 
       <motion.div

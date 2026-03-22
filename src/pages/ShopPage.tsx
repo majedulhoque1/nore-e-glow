@@ -128,6 +128,11 @@ const ShopPage = () => {
 
   return (
     <div className="min-h-screen bg-ivory">
+      <SEOHead
+        title="Shop All Jewellery"
+        description="Browse the full Nore'e collection — rings, bracelets, phone charms, necklaces and sets. Cash on delivery across all 64 districts of Bangladesh."
+        url="/shop"
+      />
       <NavigationBar />
 
       {/* Page Header */}

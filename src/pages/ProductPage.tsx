@@ -223,6 +223,15 @@ const ProductPage = () => {
 
   return (
     <div className="min-h-screen bg-ivory">
+      <SEOHead
+        title={product.name}
+        description={product.description || `${product.name} by Nore'e Jewellery. ৳${product.price}. Cash on delivery across Bangladesh.`}
+        image={product.images?.[0]}
+        url={`/product/${product.slug}`}
+        type="product"
+        price={product.price}
+        category={product.category}
+      />
       <NavigationBar />
 
       <motion.div
