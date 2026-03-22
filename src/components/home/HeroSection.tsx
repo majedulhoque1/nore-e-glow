@@ -1,18 +1,28 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const heroImage = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.34%20AM%20(1).jpeg';
+const heroImageDesktop = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.34%20AM%20(1).jpeg';
+const heroImageMobile = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.35%20AM%20(1).jpeg';
 
 const HeroSection = () => (
   <section className="relative w-full min-h-[75vh] md:min-h-[90vh] overflow-hidden">
-    {/* Background Image */}
+    {/* Desktop Background Image */}
     <motion.img
       initial={{ scale: 1.06, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-      src={heroImage}
+      src={heroImageDesktop}
       alt="Nore'e editorial — South Asian woman wearing gold jewelry in golden hour"
-      className="absolute inset-0 w-full h-full object-cover object-center"
+      className="hidden md:block absolute inset-0 w-full h-full object-cover object-center"
+    />
+    {/* Mobile Background Image */}
+    <motion.img
+      initial={{ scale: 1.06, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+      src={heroImageMobile}
+      alt="Nore'e editorial — South Asian woman wearing gold jewelry"
+      className="block md:hidden absolute inset-0 w-full h-full object-cover object-center"
     />
 
     {/* Dark Overlay */}
