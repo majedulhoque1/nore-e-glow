@@ -231,7 +231,7 @@ const NavigationBar = () => {
                 <X size={24} />
               </button>
               <div className="flex flex-col gap-6">
-                {navLinks.filter(l => !l.accent).map(link => (
+                {navLinks.map(link => (
                   <Link
                     key={link.href}
                     to={link.href}
@@ -243,11 +243,12 @@ const NavigationBar = () => {
                 ))}
                 <div className="border-t border-bark-mid/30 pt-6 mt-2">
                   <Link
-                    to="/mystery-collection"
+                    to="/mystery-collection/build"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="font-display text-2xl text-gold italic"
+                    className="inline-flex items-center gap-2 font-display text-2xl text-gold italic"
                   >
-                    Mystery Box ✦
+                    <Package size={20} />
+                    Build Your Box
                   </Link>
                 </div>
               </div>
