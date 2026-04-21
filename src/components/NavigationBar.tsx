@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingBag, Menu, X } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, Heart, Sparkles } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartDrawer from './CartDrawer';
 import SearchModal from './SearchModal';
@@ -42,19 +42,51 @@ const NavigationBar = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchValue.trim()) {
+      navigate(`/shop?q=${encodeURIComponent(searchValue.trim())}`);
+      setSearchValue('');
+    } else {
+      setSearchOpen(true);
+    }
+  };
+
   return (
     <>
-      <nav className="sticky top-0 z-30 bg-ivory/65 backdrop-blur-xl border-b border-bark/8 supports-[backdrop-filter]:bg-ivory/55">
-        {/* Desktop — left logo, nav row, right actions */}
-        <div className="hidden md:flex items-center h-[68px] px-8 max-w-[1400px] mx-auto gap-10">
-          {/* Left — logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <img src={logo} alt="Nore'e" className="h-8 w-8 object-contain" />
-            <span className="font-display font-semibold text-2xl text-bark tracking-tight">Nore'e</span>
-          </Link>
+      <header className="sticky top-0 z-30 bg-ivory/70 backdrop-blur-xl border-b border-bark/8 supports-[backdrop-filter]:bg-ivory/60">
+        {/* Utility row */}
+        <div className="hidden md:block border-b border-bark/8">
+          <div className="max-w-[1400px] mx-auto px-8 h-9 flex items-center justify-between font-body text-[11px] text-bark-muted tracking-wide">
+            <div className="flex items-center gap-5">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-gold" />
+                Free delivery in Dhaka
+              </span>
+              <span className="text-bark/15">|</span>
+              <span>Cash on delivery, nationwide</span>
+            </div>
+            <div className="flex items-center gap-5">
+              <Link to="/shop" className="hover:text-gold transition-colors">Track Order</Link>
+              <Link to="/shop" className="hover:text-gold transition-colors">FAQ</Link>
+              <a
+                href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER || ''}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gold transition-colors"
+              >
+                WhatsApp Us
+              </a>
+            </div>
+          </div>
+        </div>
 
-          {/* Center — primary nav */}
-          <div className="flex items-center gap-8 flex-1">
+        {/* Main row */}
+        <div className="hidden md:flex relative items-center h-[72px] px-8 max-w-[1400px] mx-auto gap-8">
+          {/* Left — primary nav */}
+          <div className="flex items-center gap-7 flex-1">
             {navLinks.filter(l => !l.accent).map(link => (
               <Link
                 key={link.href}
@@ -69,31 +101,58 @@ const NavigationBar = () => {
                 )}
               </Link>
             ))}
-            {/* Mystery box — accent pill */}
             {navLinks.filter(l => l.accent).map(link => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`group relative inline-flex items-center gap-1.5 font-display italic text-[13px] px-3 py-1 rounded-full border transition-all ${
+                className={`inline-flex items-center gap-1.5 font-display italic text-[13px] px-3 py-1 rounded-full border transition-all ${
                   isActive(link.href)
                     ? 'border-gold bg-gold/10 text-gold'
                     : 'border-gold/40 text-gold hover:bg-gold/10 hover:border-gold'
                 }`}
               >
-                <span className="text-gold text-[10px]">✦</span>
+                <Sparkles size={11} className="text-gold" />
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Right — actions */}
-          <div className="flex items-center gap-5 shrink-0">
+          {/* Center — logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0 absolute left-1/2 -translate-x-1/2">
+            <img src={logo} alt="Nore'e" className="h-8 w-8 object-contain" />
+            <span className="font-display font-semibold text-[1.7rem] text-bark tracking-tight leading-none">Nore'e</span>
+          </Link>
+
+          {/* Right — search pill + icons */}
+          <div className="flex items-center gap-4 flex-1 justify-end">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="hidden lg:flex items-center bg-white/70 border border-bark/10 rounded-full h-9 px-4 w-[220px] focus-within:border-gold transition-colors"
+            >
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Search jewelry..."
+                className="flex-1 bg-transparent font-body text-[13px] text-bark placeholder:text-bark-muted/70 focus:outline-none"
+              />
+              <button type="submit" aria-label="Search" className="text-bark-muted hover:text-gold transition-colors">
+                <Search size={15} strokeWidth={1.8} />
+              </button>
+            </form>
             <button
               aria-label="Search"
               onClick={() => setSearchOpen(true)}
-              className="text-bark-mid hover:text-gold transition-colors"
+              className="lg:hidden text-bark-mid hover:text-gold transition-colors"
             >
               <Search size={19} strokeWidth={1.6} />
+            </button>
+            <button
+              aria-label="Wishlist"
+              onClick={() => navigate('/shop')}
+              className="text-bark-mid hover:text-gold transition-colors"
+            >
+              <Heart size={19} strokeWidth={1.6} />
             </button>
             <div
               className="relative"
@@ -102,12 +161,12 @@ const NavigationBar = () => {
             >
               <button
                 aria-label="Cart"
-                className="relative text-bark-mid hover:text-gold transition-colors flex items-center gap-1.5"
+                className="relative text-bark-mid hover:text-gold transition-colors flex items-center"
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingBag size={19} strokeWidth={1.6} />
                 {totalItems > 0 && (
-                  <span className="font-body font-semibold text-[11px] text-bark min-w-[20px] h-5 px-1.5 rounded-full bg-gold flex items-center justify-center">
+                  <span className="absolute -top-1.5 -right-2 font-body font-semibold text-[10px] text-bark min-w-[18px] h-[18px] px-1 rounded-full bg-gold flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -148,7 +207,7 @@ const NavigationBar = () => {
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile Menu Drawer */}
       <AnimatePresence>
