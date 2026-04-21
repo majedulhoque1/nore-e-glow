@@ -1,79 +1,125 @@
+# Custom Mystery Box — "Build Your Own"
 
+Let customers curate their own box from existing products, alongside the existing surprise mystery box. Same gift-wrap experience. 10% bundle discount when full box is built.
 
-# Gift Wrapping for Mystery Box
+## Flow
 
-Add an optional gift-wrap layer to mystery box orders. Toggle lives in the cart drawer, adds ৳50, and persists to `mystery_box_orders` in Supabase.
-
-## Database
-
-Migration on `mystery_box_orders`:
-
-```sql
-ALTER TABLE mystery_box_orders
-  ADD COLUMN IF NOT EXISTS is_gift BOOLEAN DEFAULT false,
-  ADD COLUMN IF NOT EXISTS gift_recipient_name TEXT,
-  ADD COLUMN IF NOT EXISTS gift_message TEXT,
-  ADD COLUMN IF NOT EXISTS gift_wrap_type TEXT DEFAULT 'kraft',
-  ADD COLUMN IF NOT EXISTS gift_handwritten BOOLEAN DEFAULT true,
-  ADD COLUMN IF NOT EXISTS gift_wrap_cost INTEGER DEFAULT 0;
-
-CREATE INDEX IF NOT EXISTS idx_mystery_orders_gift
-  ON mystery_box_orders(is_gift, created_at DESC);
+```
+/mystery-collection  →  Choice screen (2 cards)
+                          ├─ Surprise Box  →  /mystery-collection/surprise   (existing page, just re-route)
+                          └─ Build Your Own →  /mystery-collection/build     (new page)
 ```
 
-No RLS changes (existing INSERT/SELECT policies cover the new columns).
+## Choice screen (`MysteryCollectionPage.tsx` — refactor)
 
-## New Components
+- Replace current single-purpose hero with a 2-card chooser:
+  - **Card 1 — Surprise Box** (existing flow): "Curated by us. Pure discovery." → `/mystery-collection/surprise`
+  - **Card 2 — Build Your Own**: "Hand-pick 3–5 pieces. Save 10%." → `/mystery-collection/build`
+- Keep the bark/gold hero band, brand voice. Cards use the existing palette (ivory-warm bg, gold accent border on hover).
 
-All under `src/components/mystery/`:
+## Surprise page (`SurpriseMysteryPage.tsx` — moved, not rewritten)
 
-1. **`GiftWrapColorSelector.tsx`** — 3-button row (Kraft / Gold / Burgundy) with colored dot, gold border on selected.
-2. **`GiftOptionToggle.tsx`** — Checkbox row "Gift wrap for someone special 🎁" with rotating chevron.
-3. **`GiftCustomizationPanel.tsx`** — Wraps toggle + (when on) recipient name (40 char), message (100 char), color selector, handwritten/printed toggle, +৳50 summary card. Animates open/close with framer-motion.
+- Move the current `MysteryCollectionPage.tsx` body content into `src/pages/SurpriseMysteryPage.tsx` verbatim. No logic change. Route at `/mystery-collection/surprise`.
 
-## CartContext changes (`src/context/CartContext.tsx`)
+## Build page (`BuildYourBoxPage.tsx` — new)
+
+Layout (desktop): left = product grid (filterable by category), right = sticky "Your Box" panel.
+
+**Product grid**
+
+- Loads products from Supabase `products` table, only those with `stock_qty > 0`.
+- Category filter chips (All, Rings, Earrings, Necklaces, Bracelets — pulled from `categories`).
+- Each product card: 4:5 image, name, price, "Add" button. Selected items show a gold check overlay + "Added".
+
+**Your Box panel (sticky, right column on desktop, bottom sheet on mobile)**
+
+- Shows selected items (thumbnail row), count "X / 5".
+- Live price breakdown:
+  - Subtotal: ৳XXX
+  - Bundle discount (−10%): −৳XX *(only when 3+ items selected)*
+  - Total: ৳XXX
+- Progress hint: "Pick at least 3 items" / "Add 1 more to maximize" / "Box full — ready!"
+- Validation: button disabled until 3 items; max 5 (Add buttons disable on grid).
+- "Add Custom Box to Cart" button → adds a single composite cart item, then opens cart drawer.
+
+**Cart item shape** (single line item, not 3 separate ones — keeps gift wrap clean):
+
+```ts
+{
+  id: `custom-box-${timestamp}`,
+  name: `Custom Box · ${itemCount} pieces`,
+  price: discountedTotal,           // already net of 10%
+  image: firstSelectedItemImage,
+  slug: 'custom-mystery-box',
+  isMystery: true,                  // ← reuses gift-wrap flow in CartDrawer
+  isCustomBox: true,                // ← new flag
+  customBoxItems: [{id, name, price, image, slug}, ...],  // for order record
+  quantity: 1,
+}
+```
+
+## CartContext changes
 
 Extend `CartItem`:
+
 ```ts
-isMystery?: boolean;
-campaignId?: string;
-couponCode?: string;
-isGift?: boolean;
-giftRecipientName?: string;
-giftMessage?: string;
-giftWrapType?: 'kraft' | 'gold' | 'burgundy';
-giftHandwritten?: boolean;
-giftCost?: number;
+isCustomBox?: boolean;
+customBoxItems?: { id: string; name: string; price: number; image: string; slug: string }[];
 ```
 
-Add `updateCartItem(id, partial)` helper and expose it via context. Keep subtotal logic untouched — gift cost is added at the cart/checkout summary level so subtotal still reflects products only.
+No other context logic changes — `isMystery: true` already triggers gift wrap panel and routes to `mystery_box_orders` at checkout.
 
-## CartDrawer (`src/components/CartDrawer.tsx`)
+## CartDrawer
 
-- Detect `mysteryItem = items.find(i => i.isMystery)`.
-- If present, render `<GiftCustomizationPanel>` between items list and footer; on change, call `updateCartItem(mysteryItem.id, { isGift, giftRecipientName, giftMessage, giftWrapType, giftHandwritten, giftCost: isGift ? 50 : 0 })`.
-- Footer totals: show Subtotal, optional `Gift wrap +৳50` line, then existing checkout button updated to `Checkout · ৳{subtotal + giftCost}` (delivery still calculated at checkout).
+For custom box items, show a small expandable "View 4 items" line under the box name listing the included pieces (read-only). No quantity controls — custom box is a fixed unit (`updateQty` hidden, `removeItem` removes the whole box).
 
-## CheckoutPage (`src/pages/CheckoutPage.tsx`)
+## CheckoutPage
 
-- Compute `mysteryItem` and `giftCost`.
-- Order Summary panel: insert "Gift wrap" line under Subtotal with wrap type + message style sub-text.
-- Total = `subtotal + giftCost + deliveryCharge`.
-- **Routing logic:** if `mysteryItem` is in cart, insert into `mystery_box_orders` with all gift fields + `campaign_id`, `coupon_code`. Otherwise keep existing `orders` insert path. (Currently everything goes to `orders` — this split is needed for gift fields to land in the right table.)
+In the `mystery_box_orders` insert path:
 
-## Mystery page (`src/pages/MysteryCollectionPage.tsx`)
+- If `isCustomBox`, populate `items_packed` with the `customBoxItems` JSONB so packing staff knows what to pack.
+- `coupon_code` stays null (custom box uses bundle discount, not the surprise-box coupon).
+- `campaign_id` stays null for custom boxes.
 
-No structural changes. Verify the "Add to Cart" already passes `isMystery: true`, `campaignId`, `couponCode` so CartDrawer can detect it. If not, patch the addItem call.
+## App routing
 
-## Files touched
+In `App.tsx`:
 
-- New: `src/components/mystery/GiftCustomizationPanel.tsx`, `GiftOptionToggle.tsx`, `GiftWrapColorSelector.tsx`
-- Edited: `src/context/CartContext.tsx`, `src/components/CartDrawer.tsx`, `src/pages/CheckoutPage.tsx`, `src/pages/MysteryCollectionPage.tsx` (only if mystery flag missing)
-- Migration: ALTER on `mystery_box_orders`
+- `/mystery-collection` → new chooser page
+- `/mystery-collection/surprise` → existing surprise box page
+- `/mystery-collection/build` → new build page
+
+Add 301-style client redirect from old `/mystery-collection` direct-to-purchase intent? No — the chooser is the new front door, no redirect needed.
+
+## Files
+
+**New:**
+
+- `src/pages/BuildYourBoxPage.tsx`
+- `src/pages/SurpriseMysteryPage.tsx` (extracted from current MysteryCollectionPage)
+- `src/components/mystery/MysteryChoiceCard.tsx` (small reusable card for chooser)
+- `src/components/mystery/BuildBoxPanel.tsx` (the sticky right-side selection panel)
+- `src/components/mystery/BuildBoxProductCard.tsx` (grid card with select state)
+
+**Edited:**
+
+- `src/pages/MysteryCollectionPage.tsx` → becomes the chooser (slim)
+- `src/context/CartContext.tsx` → add `isCustomBox`, `customBoxItems` fields
+- `src/components/CartDrawer.tsx` → custom-box rendering (list contents, hide qty)
+- `src/pages/CheckoutPage.tsx` → write `items_packed` for custom boxes
+- `src/App.tsx` → add 2 new routes
 
 ## Out of scope
 
-- No admin dashboard, no n8n, no packing automation
-- No changes to non-mystery orders
-- No new env vars or design tokens
+- No DB schema changes (existing `mystery_box_orders.items_packed` JSONB column already accepts the contents)
+- No new product attributes, no new "boxable" flag on products — every in-stock product is selectable
+- No saving/sharing of in-progress boxes (no auth)
+- No per-item gift wrap — wrap applies to the whole box, same as surprise
 
+## Edge cases handled
+
+- Empty product list → "Coming back soon" state
+- Selecting same product twice → blocked with subtle shake on Add button
+- User leaves page mid-build → selection state lives in component only (intentional, simple); cart only gets the finished box  
+make sure mystery collection option is in header section
+- &nbsp;
