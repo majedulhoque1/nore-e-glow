@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Star } from 'lucide-react';
-
-const heroImageDesktop = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.34%20AM%20(1).jpeg';
-const heroImageMobile = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.35%20AM%20(1).jpeg';
+import { ChevronDown, Star, ArrowRight } from 'lucide-react';
+import heroImageDesktop from '@/assets/hero-desktop.jpg';
+import heroImageMobile from '@/assets/hero-mobile.jpg';
 
 const HeroSection = () => (
   <section className="relative w-full min-h-[78vh] md:min-h-[92vh] overflow-hidden bg-bark">
@@ -25,9 +24,13 @@ const HeroSection = () => (
       className="block md:hidden absolute inset-0 w-full h-full object-cover object-center animate-ken-burns"
     />
 
-    {/* Editorial overlay — directional + vignette */}
-    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/10 z-[1]" />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/15 z-[1]" />
+    {/* Editorial overlay — directional + vignette + bottom-left CTA scrim */}
+    <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/10 z-[1]" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[1]" />
+    {/* Soft radial scrim behind text block (desktop) for guaranteed CTA contrast */}
+    <div className="hidden md:block absolute left-0 bottom-0 w-[55%] h-[75%] z-[1] pointer-events-none"
+      style={{ background: 'radial-gradient(ellipse at 30% 70%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 45%, transparent 75%)' }}
+    />
 
     {/* Vertical brand mark — desktop */}
     <div className="hidden md:flex absolute left-6 top-0 bottom-0 z-[3] flex-col items-center justify-between py-8 text-ivory/60">
@@ -83,16 +86,19 @@ const HeroSection = () => (
         >
           <Link
             to="/shop"
-            className="group relative inline-flex items-center justify-center w-full md:w-auto max-w-[280px] md:max-w-none bg-gold text-bark font-body font-medium text-[13px] uppercase tracking-[0.18em] px-9 py-4 rounded-[2px] hover:-translate-y-px transition-all duration-300 active:scale-[0.97] overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2.5 w-full md:w-auto max-w-[300px] md:max-w-none bg-gold text-bark font-body font-semibold text-[13px] uppercase tracking-[0.2em] px-10 py-[18px] rounded-[2px] hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.97] overflow-hidden ring-1 ring-gold-light/60 hover:ring-gold-light"
+            style={{ boxShadow: '0 14px 40px -10px rgba(212, 165, 90, 0.55), 0 0 0 4px rgba(212, 165, 90, 0.12)' }}
           >
             <span className="relative z-[1]">Shop the Edit</span>
+            <ArrowRight size={15} className="relative z-[1] group-hover:translate-x-1 transition-transform" strokeWidth={2.2} />
             <span className="absolute inset-0 bg-gold-light translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out z-0" />
           </Link>
           <Link
             to="/category/new-arrivals"
-            className="font-body text-sm text-ivory/80 hover:text-gold tracking-wide link-reveal"
+            className="font-body text-sm font-medium text-ivory hover:text-gold tracking-wide link-reveal underline-offset-4"
+            style={{ textShadow: '0 1px 12px rgba(0,0,0,0.6)' }}
           >
-            Discover New Arrivals
+            Discover New Arrivals →
           </Link>
         </motion.div>
 
