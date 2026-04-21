@@ -55,18 +55,18 @@ const NavigationBar = () => {
   return (
     <>
       <header className="sticky top-0 z-30 bg-ivory/70 backdrop-blur-xl border-b border-bark/8 supports-[backdrop-filter]:bg-ivory/60">
-        {/* Utility row */}
-        <div className="hidden md:block border-b border-bark/8">
-          <div className="max-w-[1400px] mx-auto px-8 h-9 flex items-center justify-between font-body text-[11px] text-bark-muted tracking-wide">
-            <div className="flex items-center gap-5">
+        {/* Utility row — dark bark for editorial weight */}
+        <div className="hidden md:block bg-bark text-ivory">
+          <div className="max-w-[1400px] mx-auto px-8 h-9 flex items-center justify-between font-body text-[11px] tracking-wide">
+            <div className="flex items-center gap-5 text-ivory/75">
               <span className="inline-flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-gold" />
                 Free delivery in Dhaka
               </span>
-              <span className="text-bark/15">|</span>
+              <span className="text-ivory/20">|</span>
               <span>Cash on delivery, nationwide</span>
             </div>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5 text-ivory/75">
               <Link to="/shop" className="hover:text-gold transition-colors">Track Order</Link>
               <Link to="/shop" className="hover:text-gold transition-colors">FAQ</Link>
               <a
