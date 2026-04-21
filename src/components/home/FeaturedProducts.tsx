@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProductCard from '@/components/ProductCard';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Star, ArrowRight } from 'lucide-react';
+import SectionHeading from './SectionHeading';
 
 interface Product {
   id: string;
@@ -36,26 +38,34 @@ const FeaturedProducts = () => {
     <motion.section
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="py-16 md:py-24 px-4 md:px-8 max-w-[1400px] mx-auto"
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="py-20 md:py-32 px-4 md:px-8 max-w-[1400px] mx-auto"
     >
-      <div className="flex flex-col items-center mb-10">
-        <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold">Most loved</span>
-        <h2 className="font-display font-medium text-center text-bark mt-2" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.4rem)' }}>
-          Bestsellers
-        </h2>
-        <div className="flex items-center gap-1.5 mt-3 font-body text-xs text-bark-mid">
-          <span className="flex gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={11} className="fill-gold text-gold" />
-            ))}
-          </span>
-          <span>4.9 · 340 reviews</span>
-        </div>
-      </div>
+      <SectionHeading
+        eyebrow="Most loved"
+        numeral="03"
+        title={<>Bestsellers,<br /><span className="italic text-gold">handpicked.</span></>}
+        align="left"
+        subtitle="The pieces our community comes back for, again and again."
+        rightSlot={
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex items-center gap-1.5 font-body text-xs text-bark-mid">
+              <span className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={12} className="fill-gold text-gold" />
+                ))}
+              </span>
+              <span className="tracking-wide">4.9 · 340 reviews</span>
+            </div>
+            <Link to="/shop" className="inline-flex items-center gap-1.5 font-body text-[11px] uppercase tracking-[0.22em] text-bark hover:text-gold link-reveal">
+              View All <ArrowRight size={12} />
+            </Link>
+          </div>
+        }
+      />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-7">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => (
               <div key={i}>
