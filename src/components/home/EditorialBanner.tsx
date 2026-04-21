@@ -56,13 +56,15 @@ const EditorialBanner = () => (
     </div>
 
     {/* Image */}
-    <div className="relative h-[220px] md:h-auto order-1 md:order-2 overflow-hidden">
+    <div className="relative h-[260px] md:h-auto order-1 md:order-2 overflow-hidden">
       <img
         src={editorialImg}
         alt="Nore'e candy bead phone charms collection"
         className="w-full h-full object-cover"
       />
-      <span className="absolute bottom-4 left-4 font-body text-[11px] text-ivory uppercase tracking-wider">
+      {/* Gold frame inset */}
+      <div className="absolute inset-4 border border-gold/40 pointer-events-none" />
+      <span className="absolute bottom-6 left-6 font-body text-[11px] text-ivory uppercase tracking-wider">
         Nore'e Candy Collection
       </span>
     </div>

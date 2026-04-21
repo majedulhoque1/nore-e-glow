@@ -38,6 +38,152 @@ export type Database = {
         }
         Relationships: []
       }
+      mystery_box_campaigns: {
+        Row: {
+          coupon_amount: number
+          coupon_code: string
+          coupon_expires_days: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          price: number
+          status: string | null
+        }
+        Insert: {
+          coupon_amount: number
+          coupon_code: string
+          coupon_expires_days?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          price: number
+          status?: string | null
+        }
+        Update: {
+          coupon_amount?: number
+          coupon_code?: string
+          coupon_expires_days?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          price?: number
+          status?: string | null
+        }
+        Relationships: []
+      }
+      mystery_box_inventory: {
+        Row: {
+          campaign_id: string | null
+          created_at: string | null
+          id: string
+          is_packed: boolean | null
+          packed_into_order_id: string | null
+          product_id: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_packed?: boolean | null
+          packed_into_order_id?: string | null
+          product_id?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_packed?: boolean | null
+          packed_into_order_id?: string | null
+          product_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mystery_box_inventory_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mystery_box_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mystery_box_inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mystery_box_orders: {
+        Row: {
+          address: string
+          campaign_id: string | null
+          coupon_code: string | null
+          created_at: string | null
+          customer_name: string
+          customer_phone: string
+          delivered_at: string | null
+          delivery_charge: number | null
+          district: string
+          id: string
+          items_packed: Json | null
+          order_number: string
+          shipped_at: string | null
+          status: string | null
+          total: number
+          tracking_number: string | null
+          upazila: string
+        }
+        Insert: {
+          address: string
+          campaign_id?: string | null
+          coupon_code?: string | null
+          created_at?: string | null
+          customer_name: string
+          customer_phone: string
+          delivered_at?: string | null
+          delivery_charge?: number | null
+          district: string
+          id?: string
+          items_packed?: Json | null
+          order_number: string
+          shipped_at?: string | null
+          status?: string | null
+          total: number
+          tracking_number?: string | null
+          upazila: string
+        }
+        Update: {
+          address?: string
+          campaign_id?: string | null
+          coupon_code?: string | null
+          created_at?: string | null
+          customer_name?: string
+          customer_phone?: string
+          delivered_at?: string | null
+          delivery_charge?: number | null
+          district?: string
+          id?: string
+          items_packed?: Json | null
+          order_number?: string
+          shipped_at?: string | null
+          status?: string | null
+          total?: number
+          tracking_number?: string | null
+          upazila?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mystery_box_orders_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "mystery_box_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           address: string

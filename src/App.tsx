@@ -9,6 +9,7 @@ import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import OrderSuccessPage from "./pages/OrderSuccessPage.tsx";
+import MysteryCollectionPage from "./pages/MysteryCollectionPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/product/:slug" element={<ProductPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Route path="/mystery-collection" element={<MysteryCollectionPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

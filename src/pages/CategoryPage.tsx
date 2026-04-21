@@ -1,7 +1,9 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import NavigationBar from '@/components/NavigationBar';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import WhatsAppFAB from '@/components/WhatsAppFAB';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -59,6 +61,7 @@ const CategoryPage = () => {
         description={`Shop Nore'e ${categoryName} — handcrafted pieces delivered cash on delivery across Bangladesh.`}
         url={`/category/${slug}`}
       />
+      <AnnouncementBar />
       <NavigationBar />
 
       <div className="bg-ivory-warm border-b border-border py-10 px-4 md:px-8">
@@ -116,6 +119,7 @@ const CategoryPage = () => {
       </main>
 
       <Footer />
+      <WhatsAppFAB />
     </div>
   );
 };

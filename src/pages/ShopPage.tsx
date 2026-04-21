@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { SlidersHorizontal, X, LayoutGrid, Grid3x3 } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import WhatsAppFAB from '@/components/WhatsAppFAB';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -43,6 +45,7 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
+  const [mobileDense, setMobileDense] = useState(false);
 
   useEffect(() => {
     supabase
@@ -62,7 +65,6 @@ const ShopPage = () => {
 
     if (sortBy === 'price-asc') result = [...result].sort((a, b) => a.price - b.price);
     else if (sortBy === 'price-desc') result = [...result].sort((a, b) => b.price - a.price);
-    // 'newest' is default order from query
 
     return result;
   }, [products, selectedCategory, sortBy]);
@@ -73,6 +75,8 @@ const ShopPage = () => {
   };
 
   const hasActiveFilter = selectedCategory !== 'all' || sortBy !== 'newest';
+  const activeCatLabel = CATEGORIES.find(c => c.value === selectedCategory)?.label;
+  const activeSortLabel = SORT_OPTIONS.find(s => s.value === sortBy)?.label;
 
   const FilterContent = () => (
     <div className="space-y-8">
@@ -133,6 +137,7 @@ const ShopPage = () => {
         description="Browse the full Nore'e collection — rings, bracelets, phone charms, necklaces and sets. Cash on delivery across all 64 districts of Bangladesh."
         url="/shop"
       />
+      <AnnouncementBar />
       <NavigationBar />
 
       {/* Page Header */}
@@ -155,41 +160,90 @@ const ShopPage = () => {
           <FilterContent />
         </aside>
 
-        {/* Main Grid Area */}
         <main className="flex-1 px-4 md:px-8 py-6 md:py-8">
-          {/* Mobile filter trigger + result count */}
-          <div className="flex items-center justify-between mb-6">
+          {/* Toolbar */}
+          <div className="flex items-center justify-between mb-4 gap-3">
             <p className="font-body text-sm text-bark-muted">
               {loading ? '...' : `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`}
             </p>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <button className="md:hidden flex items-center gap-1.5 font-body text-sm text-bark-mid border border-border px-3 py-1.5 rounded-[2px] hover:border-gold transition-colors active:scale-[0.97]">
-                  <SlidersHorizontal size={14} />
-                  Filter
+            <div className="flex items-center gap-2">
+              {/* Mobile density toggle */}
+              <div className="md:hidden flex items-center border border-border rounded-[2px] overflow-hidden">
+                <button
+                  aria-label="2 columns"
+                  onClick={() => setMobileDense(false)}
+                  className={`p-2 ${!mobileDense ? 'bg-ivory-warm text-gold' : 'text-bark-muted'}`}
+                >
+                  <LayoutGrid size={14} />
                 </button>
-              </SheetTrigger>
-              <SheetContent side="right" className="bg-white w-[280px] p-6">
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="font-display font-medium text-lg text-bark">Filters</h2>
-                  <SheetClose asChild>
-                    <button className="text-bark-muted hover:text-gold transition-colors">
-                      <X size={20} />
-                    </button>
-                  </SheetClose>
-                </div>
-                <FilterContent />
-              </SheetContent>
-            </Sheet>
+                <button
+                  aria-label="3 columns"
+                  onClick={() => setMobileDense(true)}
+                  className={`p-2 border-l border-border ${mobileDense ? 'bg-ivory-warm text-gold' : 'text-bark-muted'}`}
+                >
+                  <Grid3x3 size={14} />
+                </button>
+              </div>
+
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button className="md:hidden flex items-center gap-1.5 font-body text-sm text-bark-mid border border-border px-3 py-1.5 rounded-[2px] hover:border-gold transition-colors active:scale-[0.97]">
+                    <SlidersHorizontal size={14} />
+                    Filter
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="right" className="bg-white w-[280px] p-6">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="font-display font-medium text-lg text-bark">Filters</h2>
+                    <SheetClose asChild>
+                      <button className="text-bark-muted hover:text-gold transition-colors">
+                        <X size={20} />
+                      </button>
+                    </SheetClose>
+                  </div>
+                  <FilterContent />
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
+
+          {/* Active filter chips */}
+          {hasActiveFilter && (
+            <div className="flex flex-wrap items-center gap-2 mb-5">
+              {selectedCategory !== 'all' && (
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className="inline-flex items-center gap-1.5 font-body text-xs px-3 py-1.5 bg-ivory-warm border border-gold/40 text-gold rounded-[2px] hover:bg-gold/10 transition-colors"
+                >
+                  {activeCatLabel}
+                  <X size={12} />
+                </button>
+              )}
+              {sortBy !== 'newest' && (
+                <button
+                  onClick={() => setSortBy('newest')}
+                  className="inline-flex items-center gap-1.5 font-body text-xs px-3 py-1.5 bg-ivory-warm border border-gold/40 text-gold rounded-[2px] hover:bg-gold/10 transition-colors"
+                >
+                  {activeSortLabel}
+                  <X size={12} />
+                </button>
+              )}
+              <button
+                onClick={clearFilters}
+                className="font-body text-xs text-bark-muted hover:text-gold underline underline-offset-4"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
 
           {/* Product Grid */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className={`grid gap-3 md:gap-4 ${mobileDense ? 'grid-cols-3' : 'grid-cols-2'} sm:grid-cols-3 lg:grid-cols-4`}
           >
             {loading
               ? Array.from({ length: 8 }).map((_, i) => (
@@ -226,6 +280,7 @@ const ShopPage = () => {
       </div>
 
       <Footer />
+      <WhatsAppFAB />
     </div>
   );
 };

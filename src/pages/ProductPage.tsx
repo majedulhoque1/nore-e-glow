@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Minus, Plus, Loader2, Check, MessageCircle, Truck } from 'lucide-react';
+import { Minus, Plus, Loader2, Check, MessageCircle, Truck, X, ZoomIn, RefreshCw, Phone, Star } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import WhatsAppFAB from '@/components/WhatsAppFAB';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -59,6 +61,7 @@ const MobileGallery = ({ images, name }: { images: string[]; name: string }) => 
               key={i}
               onClick={() => emblaApi?.scrollTo(i)}
               className={`w-2 h-2 rounded-full transition-colors ${i === selectedIdx ? 'bg-gold' : 'bg-bark-muted/30'}`}
+              aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>
@@ -67,14 +70,18 @@ const MobileGallery = ({ images, name }: { images: string[]; name: string }) => 
   );
 };
 
-/* ──────────────────────── Desktop Gallery ──────────────────────── */
+/* ──────────────────────── Desktop Gallery + Lightbox ──────────────────────── */
 
-const DesktopGallery = ({ images, name }: { images: string[]; name: string }) => {
+const DesktopGallery = ({ images, name, onZoom }: { images: string[]; name: string; onZoom: (idx: number) => void }) => {
   const [activeIdx, setActiveIdx] = useState(0);
 
   return (
     <div>
-      <div className="aspect-[4/5] overflow-hidden">
+      <button
+        onClick={() => onZoom(activeIdx)}
+        aria-label="Zoom image"
+        className="aspect-[4/5] overflow-hidden block w-full relative group"
+      >
         <motion.img
           key={activeIdx}
           src={images[activeIdx] || '/placeholder.svg'}
@@ -84,7 +91,10 @@ const DesktopGallery = ({ images, name }: { images: string[]; name: string }) =>
           animate={{ opacity: 1 }}
           transition={{ duration: 0.15 }}
         />
-      </div>
+        <span className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <ZoomIn size={16} className="text-bark" />
+        </span>
+      </button>
       {images.length > 1 && (
         <div className="grid grid-cols-4 gap-2 mt-3">
           {images.slice(0, 4).map((src, i) => (
@@ -102,6 +112,44 @@ const DesktopGallery = ({ images, name }: { images: string[]; name: string }) =>
   );
 };
 
+const Lightbox = ({ images, idx, onClose, onNav }: { images: string[]; idx: number; onClose: () => void; onNav: (i: number) => void }) => (
+  <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <button onClick={onClose} className="absolute top-5 right-5 text-white/80 hover:text-gold" aria-label="Close">
+        <X size={28} />
+      </button>
+      <motion.img
+        key={idx}
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }}
+        src={images[idx]}
+        alt="Zoomed product"
+        className="max-w-[92vw] max-h-[88vh] object-contain"
+        onClick={e => e.stopPropagation()}
+      />
+      {images.length > 1 && (
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2" onClick={e => e.stopPropagation()}>
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => onNav(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${i === idx ? 'bg-gold' : 'bg-white/40'}`}
+              aria-label={`Image ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </motion.div>
+  </AnimatePresence>
+);
+
 /* ──────────────────────── Product Page ──────────────────────── */
 
 const ProductPage = () => {
@@ -116,8 +164,9 @@ const ProductPage = () => {
 
   const [qty, setQty] = useState(1);
   const [btnState, setBtnState] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
 
-  // Fetch product
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
@@ -139,7 +188,6 @@ const ProductPage = () => {
         setProduct(data as Product);
         setLoading(false);
 
-        // Fetch related
         supabase
           .from('products')
           .select('*')
@@ -149,6 +197,13 @@ const ProductPage = () => {
           .then(({ data: rel }) => setRelated((rel as Product[]) || []));
       });
   }, [slug]);
+
+  // Show sticky CTA on mobile after scrolling past hero
+  useEffect(() => {
+    const onScroll = () => setShowStickyCTA(window.scrollY > 480);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleAddToCart = useCallback(() => {
     if (!product || btnState !== 'idle') return;
@@ -179,10 +234,10 @@ const ProductPage = () => {
     ? Math.round((1 - product.price / product.compare_at_price) * 100)
     : null;
 
-  /* ── Loading skeleton ── */
   if (loading) {
     return (
       <div className="min-h-screen bg-ivory">
+        <AnnouncementBar />
         <NavigationBar />
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8 grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-8 md:gap-12">
           <Skeleton className="aspect-[4/5] w-full rounded-[2px]" />
@@ -202,10 +257,10 @@ const ProductPage = () => {
     );
   }
 
-  /* ── Not found ── */
   if (notFound || !product) {
     return (
       <div className="min-h-screen bg-ivory">
+        <AnnouncementBar />
         <NavigationBar />
         <div className="flex flex-col items-center justify-center py-32 gap-4">
           <p className="font-display text-2xl text-bark">Product not found</p>
@@ -221,8 +276,10 @@ const ProductPage = () => {
     );
   }
 
+  const images = product.images.length ? product.images : ['/placeholder.svg'];
+
   return (
-    <div className="min-h-screen bg-ivory">
+    <div className="min-h-screen bg-ivory pb-24 md:pb-0">
       <SEOHead
         title={product.name}
         description={product.description || `${product.name} by Nore'e Jewellery. ৳${product.price}. Cash on delivery across Bangladesh.`}
@@ -232,6 +289,7 @@ const ProductPage = () => {
         price={product.price}
         category={product.category}
       />
+      <AnnouncementBar />
       <NavigationBar />
 
       <motion.div
@@ -240,21 +298,17 @@ const ProductPage = () => {
         transition={{ duration: 0.25, ease: 'easeOut' }}
         className="max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10"
       >
-        {/* Main 2-col */}
         <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-6 md:gap-12">
-          {/* LEFT — Gallery */}
           <div>
             <div className="md:hidden">
-              <MobileGallery images={product.images.length ? product.images : ['/placeholder.svg']} name={product.name} />
+              <MobileGallery images={images} name={product.name} />
             </div>
             <div className="hidden md:block">
-              <DesktopGallery images={product.images.length ? product.images : ['/placeholder.svg']} name={product.name} />
+              <DesktopGallery images={images} name={product.name} onZoom={(i) => setLightboxIdx(i)} />
             </div>
           </div>
 
-          {/* RIGHT — Details */}
           <div className="md:sticky md:top-6 self-start">
-            {/* Breadcrumb */}
             <nav className="font-body text-xs text-bark-muted mb-4 flex items-center gap-1.5 flex-wrap">
               <Link to="/" className="hover:text-gold transition-colors">Home</Link>
               <span>/</span>
@@ -263,15 +317,12 @@ const ProductPage = () => {
               <span className="line-clamp-1">{product.name}</span>
             </nav>
 
-            {/* Category badge */}
             <span className="inline-block font-body text-[11px] uppercase tracking-[0.12em] bg-ivory-warm border border-border text-bark-muted px-3 py-1 rounded-sm">
               {product.category.replace('-', ' ')}
             </span>
 
-            {/* Name */}
             <h1 className="font-display font-medium text-3xl text-bark leading-tight mt-3">{product.name}</h1>
 
-            {/* Price */}
             <div className="mt-3 flex items-baseline gap-3 flex-wrap">
               <span className="font-body font-semibold text-2xl text-gold">৳{product.price}</span>
               {product.compare_at_price && (
@@ -282,13 +333,13 @@ const ProductPage = () => {
               )}
             </div>
 
-            <div className="border-t border-border my-5" />
+            <div className="border-t border-gold/20 my-5" />
 
-            {/* Quantity */}
             <div className="flex items-center border border-border rounded-sm w-fit">
               <button
                 onClick={() => setQty(q => Math.max(1, q - 1))}
-                className="w-10 h-10 flex items-center justify-center font-body text-lg text-bark hover:bg-ivory-warm transition-colors active:scale-[0.95]"
+                className="w-10 h-10 flex items-center justify-center text-bark hover:bg-ivory-warm transition-colors active:scale-[0.95]"
+                aria-label="Decrease quantity"
               >
                 <Minus size={16} />
               </button>
@@ -297,24 +348,23 @@ const ProductPage = () => {
               </span>
               <button
                 onClick={() => setQty(q => Math.min(product.stock_qty ?? 99, q + 1))}
-                className="w-10 h-10 flex items-center justify-center font-body text-lg text-bark hover:bg-ivory-warm transition-colors active:scale-[0.95]"
+                className="w-10 h-10 flex items-center justify-center text-bark hover:bg-ivory-warm transition-colors active:scale-[0.95]"
+                aria-label="Increase quantity"
               >
                 <Plus size={16} />
               </button>
             </div>
 
-            {/* Add to Cart */}
             <button
               onClick={handleAddToCart}
               disabled={btnState === 'loading'}
-              className="w-full h-[52px] bg-gold text-bark font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] hover:bg-gold-dark transition-colors duration-200 mt-4 flex items-center justify-center gap-2 active:scale-[0.97] disabled:opacity-70"
+              className="w-full h-[52px] bg-gold text-bark font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] hover:bg-gold-dark hover:-translate-y-px transition-all duration-200 mt-4 flex items-center justify-center gap-2 active:scale-[0.97] disabled:opacity-70"
             >
               {btnState === 'loading' && <><Loader2 size={16} className="animate-spin" /> Adding...</>}
               {btnState === 'success' && <><Check size={16} /> Added!</>}
               {btnState === 'idle' && 'Add to Cart'}
             </button>
 
-            {/* WhatsApp */}
             <button
               onClick={handleWhatsApp}
               className="w-full h-[52px] border border-gold text-gold font-body text-sm uppercase tracking-[0.1em] rounded-[2px] hover:bg-gold hover:text-bark transition-all duration-200 mt-3 flex items-center justify-center gap-2 active:scale-[0.97]"
@@ -323,7 +373,22 @@ const ProductPage = () => {
               Order via WhatsApp
             </button>
 
-            {/* Delivery row */}
+            {/* Trust badges row */}
+            <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-border">
+              <div className="flex flex-col items-center text-center gap-1.5">
+                <Truck size={18} className="text-gold" />
+                <span className="font-body text-[11px] text-bark-mid leading-tight">Cash on Delivery</span>
+              </div>
+              <div className="flex flex-col items-center text-center gap-1.5">
+                <RefreshCw size={18} className="text-gold" />
+                <span className="font-body text-[11px] text-bark-mid leading-tight">3-day Exchange</span>
+              </div>
+              <div className="flex flex-col items-center text-center gap-1.5">
+                <Phone size={18} className="text-gold" />
+                <span className="font-body text-[11px] text-bark-mid leading-tight">WhatsApp Support</span>
+              </div>
+            </div>
+
             <div className="flex items-center gap-2 mt-4">
               <Truck size={16} className="text-gold shrink-0" />
               <span className="font-body text-xs text-bark-muted">ঢাকার মধ্যে ৳60 · ঢাকার বাইরে ৳120 · COD</span>
@@ -331,7 +396,6 @@ const ProductPage = () => {
 
             <div className="border-t border-border my-5" />
 
-            {/* Accordion */}
             <Accordion type="multiple" className="w-full">
               <AccordionItem value="description" className="border-b border-border">
                 <AccordionTrigger className="font-body font-medium text-sm text-bark py-4 hover:text-gold hover:no-underline">
@@ -361,13 +425,27 @@ const ProductPage = () => {
           </div>
         </div>
 
-        {/* You May Also Like */}
+        {/* Reviews placeholder */}
+        <section className="mt-16 md:mt-24 border-t border-border pt-10">
+          <div className="flex items-center gap-3 mb-3">
+            <h2 className="font-display text-xl text-bark">Reviews</h2>
+            <span className="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={12} className="text-bark-muted/40" />
+              ))}
+            </span>
+          </div>
+          <p className="font-body text-sm text-bark-muted">
+            No reviews yet. <span className="text-gold">Be the first to review this piece</span> after your purchase.
+          </p>
+        </section>
+
         {related.length > 0 && (
           <motion.section
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="mt-16 md:mt-24 mb-8"
           >
             <div className="border-t border-border pt-10">
@@ -382,7 +460,45 @@ const ProductPage = () => {
         )}
       </motion.div>
 
+      {lightboxIdx !== null && (
+        <Lightbox
+          images={images}
+          idx={lightboxIdx}
+          onClose={() => setLightboxIdx(null)}
+          onNav={i => setLightboxIdx(i)}
+        />
+      )}
+
+      {/* Mobile Sticky CTA */}
+      <AnimatePresence>
+        {showStickyCTA && (
+          <motion.div
+            initial={{ y: 80 }}
+            animate={{ y: 0 }}
+            exit={{ y: 80 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+            className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border p-3 grid grid-cols-2 gap-2"
+            style={{ boxShadow: '0 -4px 20px rgba(28,25,23,0.08)' }}
+          >
+            <button
+              onClick={handleWhatsApp}
+              className="h-12 border border-gold text-gold font-body text-xs uppercase tracking-[0.12em] rounded-[2px] flex items-center justify-center gap-1.5 active:scale-[0.97]"
+            >
+              <MessageCircle size={14} /> WhatsApp
+            </button>
+            <button
+              onClick={handleAddToCart}
+              disabled={btnState === 'loading'}
+              className="h-12 bg-gold text-bark font-body font-medium text-xs uppercase tracking-[0.12em] rounded-[2px] flex items-center justify-center gap-1.5 active:scale-[0.97] disabled:opacity-70"
+            >
+              {btnState === 'success' ? <><Check size={14} /> Added</> : <>Add to Cart · ৳{product.price * qty}</>}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Footer />
+      <WhatsAppFAB />
     </div>
   );
 };

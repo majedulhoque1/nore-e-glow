@@ -3,6 +3,7 @@ import ProductCard from '@/components/ProductCard';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -33,18 +34,26 @@ const FeaturedProducts = () => {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="py-16 md:py-24 px-4 md:px-8 max-w-[1400px] mx-auto"
     >
-      <h2 className="font-display font-medium text-center text-bark" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.2rem)' }}>
-        Bestsellers
-      </h2>
-      <p className="font-body font-light text-bark-mid text-center mt-2 mb-10">
-        Pieces our customers love most
-      </p>
+      <div className="flex flex-col items-center mb-10">
+        <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold">Most loved</span>
+        <h2 className="font-display font-medium text-center text-bark mt-2" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.4rem)' }}>
+          Bestsellers
+        </h2>
+        <div className="flex items-center gap-1.5 mt-3 font-body text-xs text-bark-mid">
+          <span className="flex gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} size={11} className="fill-gold text-gold" />
+            ))}
+          </span>
+          <span>4.9 · 340 reviews</span>
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
         {loading
@@ -58,7 +67,13 @@ const FeaturedProducts = () => {
           : products.length === 0
             ? <p className="col-span-full text-center font-body text-bark-mid py-12">Coming soon — check back!</p>
             : products.map((product, i) => (
-                <ProductCard key={product.id} {...product} is_new_arrival={product.is_new_arrival ?? false} index={i} />
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  is_new_arrival={product.is_new_arrival ?? false}
+                  index={i}
+                  ribbon={i === 0 ? '#1 Bestseller' : undefined}
+                />
               ))}
       </div>
     </motion.section>
