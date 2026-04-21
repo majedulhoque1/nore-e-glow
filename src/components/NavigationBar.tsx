@@ -84,7 +84,7 @@ const NavigationBar = () => {
         </div>
 
         {/* Main row */}
-        <div className="hidden md:flex items-center h-[72px] px-8 max-w-[1400px] mx-auto gap-8">
+        <div className="hidden md:flex relative items-center h-[72px] px-8 max-w-[1400px] mx-auto gap-8">
           {/* Left — primary nav */}
           <div className="flex items-center gap-7 flex-1">
             {navLinks.filter(l => !l.accent).map(link => (
