@@ -127,7 +127,13 @@ export type Database = {
           delivered_at: string | null
           delivery_charge: number | null
           district: string
+          gift_handwritten: boolean | null
+          gift_message: string | null
+          gift_recipient_name: string | null
+          gift_wrap_cost: number | null
+          gift_wrap_type: string | null
           id: string
+          is_gift: boolean | null
           items_packed: Json | null
           order_number: string
           shipped_at: string | null
@@ -146,7 +152,13 @@ export type Database = {
           delivered_at?: string | null
           delivery_charge?: number | null
           district: string
+          gift_handwritten?: boolean | null
+          gift_message?: string | null
+          gift_recipient_name?: string | null
+          gift_wrap_cost?: number | null
+          gift_wrap_type?: string | null
           id?: string
+          is_gift?: boolean | null
           items_packed?: Json | null
           order_number: string
           shipped_at?: string | null
@@ -165,7 +177,13 @@ export type Database = {
           delivered_at?: string | null
           delivery_charge?: number | null
           district?: string
+          gift_handwritten?: boolean | null
+          gift_message?: string | null
+          gift_recipient_name?: string | null
+          gift_wrap_cost?: number | null
+          gift_wrap_type?: string | null
           id?: string
+          is_gift?: boolean | null
           items_packed?: Json | null
           order_number?: string
           shipped_at?: string | null

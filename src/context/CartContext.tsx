@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
+export type GiftWrapType = 'kraft' | 'gold' | 'burgundy';
+
 export interface CartItem {
   id: string;
   name: string;
@@ -7,6 +9,17 @@ export interface CartItem {
   image: string;
   quantity: number;
   slug: string;
+  // Mystery box fields
+  isMystery?: boolean;
+  campaignId?: string;
+  couponCode?: string;
+  // Gift wrap fields
+  isGift?: boolean;
+  giftRecipientName?: string;
+  giftMessage?: string;
+  giftWrapType?: GiftWrapType;
+  giftHandwritten?: boolean;
+  giftCost?: number;
 }
 
 interface CartContextType {
@@ -14,6 +27,7 @@ interface CartContextType {
   addItem: (product: Omit<CartItem, 'quantity'>, qty?: number) => void;
   removeItem: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
+  updateCartItem: (id: string, partial: Partial<CartItem>) => void;
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -43,13 +57,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setItems(prev => prev.map(i => i.id === id ? { ...i, quantity: qty } : i));
   }, []);
 
+  const updateCartItem = useCallback((id: string, partial: Partial<CartItem>) => {
+    setItems(prev => prev.map(i => i.id === id ? { ...i, ...partial } : i));
+  }, []);
+
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, clearCart, totalItems, subtotal }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, updateCartItem, clearCart, totalItems, subtotal }}>
       {children}
     </CartContext.Provider>
   );
