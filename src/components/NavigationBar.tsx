@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingBag, Menu, X, Heart, Sparkles } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, Heart, Sparkles, Package } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartDrawer from './CartDrawer';
 import SearchModal from './SearchModal';
@@ -13,11 +13,9 @@ const navLinks = [
   { label: 'Rings', href: '/category/rings' },
   { label: 'Bracelets', href: '/category/bracelets' },
   { label: 'New Arrivals', href: '/category/new-arrivals' },
-  { label: 'Mystery Box', href: '/mystery-collection', accent: true },
 ];
 
-const leftLinks = navLinks.slice(0, 2);
-const rightLinks = navLinks.slice(2);
+const accentLink = { label: 'Build Your Box', href: '/mystery-collection/build', icon: Package };
 
 const NavigationBar = () => {
   const { totalItems } = useCart();
@@ -87,7 +85,7 @@ const NavigationBar = () => {
         <div className="hidden md:flex relative items-center h-[72px] px-8 max-w-[1400px] mx-auto gap-8">
           {/* Left — primary nav */}
           <div className="flex items-center gap-7 flex-1">
-            {navLinks.filter(l => !l.accent).map(link => (
+            {navLinks.map(link => (
               <Link
                 key={link.href}
                 to={link.href}
@@ -101,20 +99,18 @@ const NavigationBar = () => {
                 )}
               </Link>
             ))}
-            {navLinks.filter(l => l.accent).map(link => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`inline-flex items-center gap-1.5 font-display italic text-[13px] px-3 py-1 rounded-full border transition-all ${
-                  isActive(link.href)
-                    ? 'border-gold bg-gold/10 text-gold'
-                    : 'border-gold/40 text-gold hover:bg-gold/10 hover:border-gold'
-                }`}
-              >
-                <Sparkles size={11} className="text-gold" />
-                {link.label}
-              </Link>
-            ))}
+            {/* Build Your Box — special accent button */}
+            <Link
+              to={accentLink.href}
+              className={`inline-flex items-center gap-1.5 font-display italic text-[13px] px-4 py-2 rounded-full border-2 transition-all ${
+                isActive(accentLink.href)
+                  ? 'border-gold bg-gold text-bark'
+                  : 'border-gold bg-gold/10 text-gold hover:bg-gold hover:text-bark'
+              }`}
+            >
+              <Package size={14} />
+              {accentLink.label}
+            </Link>
           </div>
 
           {/* Center — logo */}
