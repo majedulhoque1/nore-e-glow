@@ -135,4 +135,77 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   );
 };
 
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  isCustomBox?: boolean;
+  customBoxItems?: { id: string; name: string; price: number; image: string; slug: string }[];
+}
+
+const CartItemRow = ({ item, onRemove, onQty }: { item: CartItem; onRemove: () => void; onQty: (q: number) => void }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="flex gap-3 items-start relative">
+      <img
+        src={item.image}
+        alt={item.name}
+        className="w-16 h-20 object-cover border border-border"
+      />
+      <div className="flex-1 min-w-0">
+        <p className="font-display text-[0.95rem] text-bark font-medium line-clamp-1">{item.name}</p>
+        <p className="font-body text-sm text-gold font-semibold mt-1">৳{item.price}</p>
+
+        {item.isCustomBox && item.customBoxItems ? (
+          <button
+            onClick={() => setExpanded(e => !e)}
+            className="mt-2 inline-flex items-center gap-1 font-body text-xs text-bark-muted hover:text-gold transition-colors"
+          >
+            <ChevronDown size={12} className={`transition-transform ${expanded ? 'rotate-180' : ''}`} />
+            {expanded ? 'Hide' : `View ${item.customBoxItems.length} items`}
+          </button>
+        ) : (
+          <div className="flex items-center gap-0 mt-2 border border-border rounded-sm w-fit">
+            <button
+              onClick={() => onQty(item.quantity - 1)}
+              className="w-8 h-8 flex items-center justify-center hover:bg-ivory-warm transition-colors"
+            >
+              <Minus size={14} />
+            </button>
+            <span className="w-8 h-8 flex items-center justify-center border-x border-border font-body font-medium text-sm">
+              {item.quantity}
+            </span>
+            <button
+              onClick={() => onQty(item.quantity + 1)}
+              className="w-8 h-8 flex items-center justify-center hover:bg-ivory-warm transition-colors"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+        )}
+
+        {expanded && item.customBoxItems && (
+          <ul className="mt-2 space-y-1 bg-ivory-warm p-2 rounded-sm">
+            {item.customBoxItems.map(ci => (
+              <li key={ci.id} className="flex justify-between font-body text-[11px] text-bark-mid">
+                <span className="line-clamp-1">{ci.name}</span>
+                <span className="text-bark-muted shrink-0 ml-2">৳{ci.price}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <button
+        onClick={onRemove}
+        className="text-bark-muted hover:text-crimson transition-colors"
+      >
+        <X size={14} />
+      </button>
+    </div>
+  );
+};
+
 export default CartDrawer;
