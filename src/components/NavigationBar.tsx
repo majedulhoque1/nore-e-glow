@@ -207,7 +207,7 @@ const NavigationBar = () => {
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile Menu Drawer */}
       <AnimatePresence>
