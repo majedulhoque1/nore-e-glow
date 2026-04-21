@@ -44,74 +44,79 @@ const NavigationBar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-30 bg-ivory/95 backdrop-blur-sm border-b border-border">
-        {/* Desktop — centered logo, nav split left/right */}
-        <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center h-16 px-8 max-w-[1400px] mx-auto gap-8">
-          {/* Left nav */}
-          <div className="flex items-center gap-7 justify-start">
-            {leftLinks.map(link => (
+      <nav className="sticky top-0 z-30 bg-ivory/65 backdrop-blur-xl border-b border-bark/8 supports-[backdrop-filter]:bg-ivory/55">
+        {/* Desktop — left logo, nav row, right actions */}
+        <div className="hidden md:flex items-center h-[68px] px-8 max-w-[1400px] mx-auto gap-10">
+          {/* Left — logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <img src={logo} alt="Nore'e" className="h-8 w-8 object-contain" />
+            <span className="font-display font-semibold text-2xl text-bark tracking-tight">Nore'e</span>
+          </Link>
+
+          {/* Center — primary nav */}
+          <div className="flex items-center gap-8 flex-1">
+            {navLinks.filter(l => !l.accent).map(link => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${isActive(link.href) ? 'text-gold' : 'text-bark-mid'}`}
+                className={`relative font-body text-[13px] tracking-[0.04em] hover:text-gold transition-colors py-1 ${
+                  isActive(link.href) ? 'text-gold' : 'text-bark-mid'
+                }`}
               >
+                {link.label}
+                {isActive(link.href) && (
+                  <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-gold" />
+                )}
+              </Link>
+            ))}
+            {/* Mystery box — accent pill */}
+            {navLinks.filter(l => l.accent).map(link => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`group relative inline-flex items-center gap-1.5 font-display italic text-[13px] px-3 py-1 rounded-full border transition-all ${
+                  isActive(link.href)
+                    ? 'border-gold bg-gold/10 text-gold'
+                    : 'border-gold/40 text-gold hover:bg-gold/10 hover:border-gold'
+                }`}
+              >
+                <span className="text-gold text-[10px]">✦</span>
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Centered logo */}
-          <Link to="/" className="flex items-center gap-2 justify-self-center">
-            <img src={logo} alt="Nore'e" className="h-8 w-8 object-contain" />
-            <span className="font-display font-semibold text-2xl text-bark">Nore'e</span>
-          </Link>
-
-          {/* Right nav + actions */}
-          <div className="flex items-center gap-7 justify-end">
-            {rightLinks.map(link => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${
-                  link.accent
-                    ? `font-display italic ${isActive(link.href) ? 'text-gold' : 'text-gold/85'}`
-                    : isActive(link.href) ? 'text-gold' : 'text-bark-mid'
-                }`}
-              >
-                {link.accent && '✦ '}{link.label}
-              </Link>
-            ))}
-            <div className="flex items-center gap-4 pl-3 border-l border-border">
+          {/* Right — actions */}
+          <div className="flex items-center gap-5 shrink-0">
+            <button
+              aria-label="Search"
+              onClick={() => setSearchOpen(true)}
+              className="text-bark-mid hover:text-gold transition-colors"
+            >
+              <Search size={19} strokeWidth={1.6} />
+            </button>
+            <div
+              className="relative"
+              onMouseEnter={() => setMiniCartOpen(true)}
+              onMouseLeave={() => setMiniCartOpen(false)}
+            >
               <button
-                aria-label="Search"
-                onClick={() => setSearchOpen(true)}
-                className="text-bark-mid hover:text-gold transition-colors"
+                aria-label="Cart"
+                className="relative text-bark-mid hover:text-gold transition-colors flex items-center gap-1.5"
+                onClick={() => setCartOpen(true)}
               >
-                <Search size={20} />
+                <ShoppingBag size={19} strokeWidth={1.6} />
+                {totalItems > 0 && (
+                  <span className="font-body font-semibold text-[11px] text-bark min-w-[20px] h-5 px-1.5 rounded-full bg-gold flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
               </button>
-              <div
-                className="relative"
-                onMouseEnter={() => setMiniCartOpen(true)}
-                onMouseLeave={() => setMiniCartOpen(false)}
-              >
-                <button
-                  aria-label="Cart"
-                  className="relative text-bark-mid hover:text-gold transition-colors"
-                  onClick={() => setCartOpen(true)}
-                >
-                  <ShoppingBag size={20} />
-                  {totalItems > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 bg-gold text-white text-[10px] font-body font-semibold rounded-full w-4 h-4 flex items-center justify-center">
-                      {totalItems}
-                    </span>
-                  )}
-                </button>
-                <AnimatePresence>
-                  {miniCartOpen && (
-                    <MiniCartPreview onOpenFull={() => { setMiniCartOpen(false); setCartOpen(true); }} />
-                  )}
-                </AnimatePresence>
-              </div>
+              <AnimatePresence>
+                {miniCartOpen && (
+                  <MiniCartPreview onOpenFull={() => { setMiniCartOpen(false); setCartOpen(true); }} />
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
