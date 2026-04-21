@@ -93,9 +93,9 @@ const CheckoutPage = () => {
         gift_wrap_type: mysteryItem.giftWrapType ?? 'kraft',
         gift_handwritten: mysteryItem.giftHandwritten ?? true,
         gift_wrap_cost: giftCost,
-        items_packed: mysteryItem.isCustomBox && mysteryItem.customBoxItems
-          ? (mysteryItem.customBoxItems as unknown as object[])
-          : null,
+        items_packed: (mysteryItem.isCustomBox && mysteryItem.customBoxItems
+          ? mysteryItem.customBoxItems
+          : null) as unknown as never,
       });
       error = res.error;
     } else {
