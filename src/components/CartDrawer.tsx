@@ -2,6 +2,7 @@ import { useCart } from '@/context/CartContext';
 import { X, ShoppingBag, Minus, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GiftCustomizationPanel, type GiftData } from './mystery/GiftCustomizationPanel';
 
 interface CartDrawerProps {
   open: boolean;
@@ -9,8 +10,32 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
-  const { items, removeItem, updateQty, subtotal, totalItems } = useCart();
+  const { items, removeItem, updateQty, updateCartItem, subtotal } = useCart();
   const navigate = useNavigate();
+
+  const mysteryItem = items.find(i => i.isMystery);
+  const giftCost = mysteryItem?.isGift ? (mysteryItem.giftCost ?? 50) : 0;
+  const cartTotal = subtotal + giftCost;
+
+  const giftValue: GiftData = {
+    isGift: mysteryItem?.isGift ?? false,
+    recipientName: mysteryItem?.giftRecipientName ?? '',
+    message: mysteryItem?.giftMessage ?? '',
+    wrapType: mysteryItem?.giftWrapType ?? 'kraft',
+    handwritten: mysteryItem?.giftHandwritten ?? true,
+  };
+
+  const handleGiftChange = (data: GiftData) => {
+    if (!mysteryItem) return;
+    updateCartItem(mysteryItem.id, {
+      isGift: data.isGift,
+      giftRecipientName: data.recipientName || undefined,
+      giftMessage: data.message || undefined,
+      giftWrapType: data.wrapType,
+      giftHandwritten: data.handwritten,
+      giftCost: data.isGift ? 50 : 0,
+    });
+  };
 
   return (
     <AnimatePresence>
@@ -90,6 +115,11 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
                     </button>
                   </div>
                 ))}
+
+                {/* Gift wrap panel — only when mystery box in cart */}
+                {mysteryItem && (
+                  <GiftCustomizationPanel value={giftValue} onChange={handleGiftChange} />
+                )}
               </div>
             )}
 
@@ -98,14 +128,24 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
               <div className="border-t border-border px-6 py-5">
                 <div className="flex justify-between">
                   <span className="font-body text-sm text-bark-muted">Subtotal</span>
-                  <span className="font-display font-semibold text-lg text-bark">৳{subtotal}</span>
+                  <span className="font-body text-sm text-bark">৳{subtotal}</span>
                 </div>
-                <p className="font-body text-[11px] text-bark-muted mt-1">Delivery charge calculated at checkout</p>
+                {giftCost > 0 && (
+                  <div className="flex justify-between mt-1.5">
+                    <span className="font-body text-sm text-bark-muted">Gift wrap</span>
+                    <span className="font-body text-sm text-gold font-medium">+৳{giftCost}</span>
+                  </div>
+                )}
+                <div className="flex justify-between mt-2 pt-2 border-t border-border">
+                  <span className="font-display text-base text-bark">Total</span>
+                  <span className="font-display font-semibold text-lg text-bark">৳{cartTotal}</span>
+                </div>
+                <p className="font-body text-[11px] text-bark-muted mt-1">Delivery calculated at checkout</p>
                 <button
                   onClick={() => { onClose(); navigate('/checkout'); }}
                   className="w-full bg-gold text-bark h-[50px] font-body text-sm uppercase tracking-[0.1em] mt-4 hover:bg-gold-dark transition-colors rounded-[2px]"
                 >
-                  Checkout · ৳{subtotal}
+                  Checkout · ৳{cartTotal}
                 </button>
                 <button
                   onClick={onClose}

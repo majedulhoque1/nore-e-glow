@@ -56,7 +56,10 @@ const CheckoutPage = () => {
 
   const hasErrors = Object.keys(errors).length > 0;
   const deliveryCharge = district ? (district === 'Dhaka' ? 60 : 120) : 0;
-  const total = subtotal + deliveryCharge;
+
+  const mysteryItem = items.find(i => i.isMystery);
+  const giftCost = mysteryItem?.isGift ? (mysteryItem.giftCost ?? 50) : 0;
+  const total = subtotal + giftCost + deliveryCharge;
 
   const handleSubmit = async () => {
     // Touch all to show errors
@@ -68,20 +71,46 @@ const CheckoutPage = () => {
 
     const orderNumber = 'NR-' + Date.now().toString().slice(-6);
     const charge = district === 'Dhaka' ? 60 : 120;
+    const finalTotal = subtotal + giftCost + charge;
 
-    const { error } = await supabase.from('orders').insert({
-      order_number: orderNumber,
-      items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity, image: i.image })),
-      subtotal,
-      delivery_charge: charge,
-      total: subtotal + charge,
-      customer_name: name.trim(),
-      customer_phone: phone.trim(),
-      address: address.trim(),
-      district,
-      upazila: upazila.trim(),
-      note: note.trim() || null,
-    });
+    let error;
+    if (mysteryItem) {
+      // Route mystery box orders (with optional gift) to the dedicated table
+      const res = await supabase.from('mystery_box_orders').insert({
+        order_number: orderNumber,
+        campaign_id: mysteryItem.campaignId ?? null,
+        coupon_code: mysteryItem.couponCode ?? null,
+        delivery_charge: charge,
+        total: finalTotal,
+        customer_name: name.trim(),
+        customer_phone: phone.trim(),
+        address: address.trim(),
+        district,
+        upazila: upazila.trim(),
+        is_gift: !!mysteryItem.isGift,
+        gift_recipient_name: mysteryItem.isGift ? (mysteryItem.giftRecipientName ?? null) : null,
+        gift_message: mysteryItem.isGift ? (mysteryItem.giftMessage ?? null) : null,
+        gift_wrap_type: mysteryItem.giftWrapType ?? 'kraft',
+        gift_handwritten: mysteryItem.giftHandwritten ?? true,
+        gift_wrap_cost: giftCost,
+      });
+      error = res.error;
+    } else {
+      const res = await supabase.from('orders').insert({
+        order_number: orderNumber,
+        items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity, image: i.image })),
+        subtotal,
+        delivery_charge: charge,
+        total: finalTotal,
+        customer_name: name.trim(),
+        customer_phone: phone.trim(),
+        address: address.trim(),
+        district,
+        upazila: upazila.trim(),
+        note: note.trim() || null,
+      });
+      error = res.error;
+    }
 
     if (error) {
       setSubmitError('Something went wrong. Please try again.');
@@ -240,6 +269,17 @@ const CheckoutPage = () => {
                 <span>Subtotal</span>
                 <span>৳{subtotal}</span>
               </div>
+              {giftCost > 0 && (
+                <div className="flex justify-between font-body text-sm text-bark-mid mb-2">
+                  <div>
+                    <span>Gift wrap</span>
+                    <p className="font-body text-[10px] text-bark-muted mt-0.5">
+                      {mysteryItem?.giftWrapType ?? 'kraft'} paper · {mysteryItem?.giftHandwritten ? 'handwritten' : 'printed'} message
+                    </p>
+                  </div>
+                  <span className="text-gold font-medium">+৳{giftCost}</span>
+                </div>
+              )}
               <div className="flex justify-between font-body text-sm text-bark-mid">
                 <span>Delivery</span>
                 <span>{district ? `৳${deliveryCharge}` : 'Select district'}</span>
@@ -249,7 +289,7 @@ const CheckoutPage = () => {
 
               <div className="flex justify-between items-baseline">
                 <span className="font-display font-medium text-lg text-bark">Total</span>
-                <span className="font-display font-semibold text-xl text-gold">৳{district ? total : subtotal}</span>
+                <span className="font-display font-semibold text-xl text-gold">৳{district ? total : subtotal + giftCost}</span>
               </div>
 
               <div className="mt-4 bg-ivory-warm border border-border p-3 rounded-sm flex items-center gap-2">
