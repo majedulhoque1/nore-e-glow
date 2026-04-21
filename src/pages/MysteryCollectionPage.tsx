@@ -6,6 +6,7 @@ import WhatsAppFAB from '@/components/WhatsAppFAB';
 import Footer from '@/components/Footer';
 import { SEOHead } from '@/components/SEOHead';
 import { MysteryChoiceCard } from '@/components/mystery/MysteryChoiceCard';
+import heroImage from '@/assets/mystery-hero.jpg';
 
 const MysteryCollectionPage = () => {
   return (
@@ -19,11 +20,19 @@ const MysteryCollectionPage = () => {
       <NavigationBar />
 
       {/* Hero */}
-      <section className="bg-bark text-ivory min-h-[280px] flex items-center justify-center px-6 py-14 md:py-16 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-10 left-[15%] w-32 h-32 rounded-full bg-gold blur-3xl" />
-          <div className="absolute bottom-10 right-[10%] w-40 h-40 rounded-full bg-gold blur-3xl" />
-        </div>
+      <section className="bg-bark text-ivory min-h-[420px] md:min-h-[480px] flex items-center justify-center px-6 py-16 md:py-20 relative overflow-hidden">
+        {/* Background image */}
+        <img
+          src={heroImage}
+          alt=""
+          aria-hidden="true"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover opacity-55"
+        />
+        {/* Dark gradient overlays for legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-bark/70 via-bark/55 to-bark/85" />
+        <div className="absolute inset-0 bg-gradient-to-r from-bark/60 via-transparent to-bark/40" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -34,10 +43,10 @@ const MysteryCollectionPage = () => {
           <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold inline-flex items-center gap-2">
             <Sparkles size={14} /> Mystery Collection
           </span>
-          <h1 className="font-display italic font-light text-ivory mt-4 leading-[1.05]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.4rem)' }}>
+          <h1 className="font-display italic font-light text-ivory mt-4 leading-[1.05] drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.4rem)' }}>
             Two Ways to <span className="text-gold">Discover</span>
           </h1>
-          <p className="font-body font-light text-sm text-bark-muted mt-4 max-w-[440px]">
+          <p className="font-body font-light text-sm text-ivory/80 mt-4 max-w-[440px]">
             Let us surprise you with a curated box, or hand-pick your own pieces and save.
           </p>
         </motion.div>
