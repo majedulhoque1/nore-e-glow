@@ -12,8 +12,8 @@ const navLinks = [
   { label: 'Shop', href: '/shop' },
   { label: 'Rings', href: '/category/rings' },
   { label: 'Bracelets', href: '/category/bracelets' },
-  { label: 'Phone Charms', href: '/category/phone-charms' },
   { label: 'New Arrivals', href: '/category/new-arrivals' },
+  { label: 'Mystery Box', href: '/mystery-collection', accent: true },
 ];
 
 const leftLinks = navLinks.slice(0, 2);
@@ -72,9 +72,13 @@ const NavigationBar = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${isActive(link.href) ? 'text-gold' : 'text-bark-mid'}`}
+                className={`font-body text-sm tracking-wide hover:text-gold transition-colors ${
+                  link.accent
+                    ? `font-display italic ${isActive(link.href) ? 'text-gold' : 'text-gold/85'}`
+                    : isActive(link.href) ? 'text-gold' : 'text-bark-mid'
+                }`}
               >
-                {link.label}
+                {link.accent && '✦ '}{link.label}
               </Link>
             ))}
             <div className="flex items-center gap-4 pl-3 border-l border-border">
@@ -167,7 +171,7 @@ const NavigationBar = () => {
                 <X size={24} />
               </button>
               <div className="flex flex-col gap-6">
-                {navLinks.map(link => (
+                {navLinks.filter(l => !l.accent).map(link => (
                   <Link
                     key={link.href}
                     to={link.href}

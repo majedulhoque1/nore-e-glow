@@ -10,6 +10,8 @@ import ProductPage from "./pages/ProductPage.tsx";
 import CheckoutPage from "./pages/CheckoutPage.tsx";
 import OrderSuccessPage from "./pages/OrderSuccessPage.tsx";
 import MysteryCollectionPage from "./pages/MysteryCollectionPage.tsx";
+import SurpriseMysteryPage from "./pages/SurpriseMysteryPage.tsx";
+import BuildYourBoxPage from "./pages/BuildYourBoxPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
             <Route path="/mystery-collection" element={<MysteryCollectionPage />} />
+            <Route path="/mystery-collection/surprise" element={<SurpriseMysteryPage />} />
+            <Route path="/mystery-collection/build" element={<BuildYourBoxPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

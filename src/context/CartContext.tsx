@@ -20,6 +20,9 @@ export interface CartItem {
   giftWrapType?: GiftWrapType;
   giftHandwritten?: boolean;
   giftCost?: number;
+  // Custom box fields
+  isCustomBox?: boolean;
+  customBoxItems?: { id: string; name: string; price: number; image: string; slug: string }[];
 }
 
 interface CartContextType {
