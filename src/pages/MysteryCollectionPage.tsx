@@ -53,6 +53,9 @@ const MysteryCollectionPage = () => {
       price: campaign.price,
       image: '/placeholder.svg',
       slug: 'mystery-collection',
+      isMystery: true,
+      campaignId: campaign.id,
+      couponCode: campaign.coupon_code,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
