@@ -4,6 +4,8 @@ import ProductCard from '@/components/ProductCard';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
+import { ArrowRight } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -34,20 +36,20 @@ const NewArrivals = () => {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="py-16 md:py-24 px-4 md:px-8 max-w-[1400px] mx-auto"
+      className="py-20 md:py-32 px-4 md:px-8 max-w-[1400px] mx-auto"
     >
-      <h2 className="font-display font-medium text-center text-bark" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.2rem)' }}>
-        New Arrivals
-      </h2>
-      <p className="font-body font-light text-bark-mid text-center mt-2 mb-10">
-        Fresh finds, just dropped
-      </p>
+      <SectionHeading
+        eyebrow="Just dropped"
+        numeral="05"
+        title={<>Newly <span className="italic text-gold">arrived.</span></>}
+        subtitle="Fresh pieces, photographed this week — don't sleep on these."
+      />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-7">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => (
               <div key={i}>
@@ -63,9 +65,9 @@ const NewArrivals = () => {
               ))}
       </div>
 
-      <div className="text-center mt-8">
-        <Link to="/category/new-arrivals" className="font-body text-sm text-gold hover:underline underline-offset-4">
-          View All New Arrivals →
+      <div className="text-center mt-12">
+        <Link to="/category/new-arrivals" className="inline-flex items-center gap-2 font-body text-[12px] uppercase tracking-[0.22em] text-bark hover:text-gold link-reveal">
+          View All New Arrivals <ArrowRight size={14} />
         </Link>
       </div>
     </motion.section>

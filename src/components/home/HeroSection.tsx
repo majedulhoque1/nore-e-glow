@@ -6,107 +6,124 @@ const heroImageDesktop = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/ob
 const heroImageMobile = 'https://lqxjwbzmsathjsulcnth.supabase.co/storage/v1/object/public/product-images/WhatsApp%20Image%202026-03-07%20at%202.32.35%20AM%20(1).jpeg';
 
 const HeroSection = () => (
-  <section className="relative w-full min-h-[75vh] md:min-h-[90vh] overflow-hidden">
-    {/* Desktop Background — Ken Burns */}
+  <section className="relative w-full min-h-[78vh] md:min-h-[92vh] overflow-hidden bg-bark">
+    {/* Backgrounds */}
     <motion.img
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       src={heroImageDesktop}
       alt="Nore'e editorial — South Asian woman wearing gold jewelry in golden hour"
       className="hidden md:block absolute inset-0 w-full h-full object-cover object-center animate-ken-burns"
     />
-    {/* Mobile Background — Ken Burns */}
     <motion.img
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       src={heroImageMobile}
       alt="Nore'e editorial — South Asian woman wearing gold jewelry"
       className="block md:hidden absolute inset-0 w-full h-full object-cover object-center animate-ken-burns"
     />
 
-    {/* Editorial gradient overlay */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10 z-[1]" />
+    {/* Editorial overlay — directional + vignette */}
+    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/10 z-[1]" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/15 z-[1]" />
 
-    {/* Content */}
-    <div className="relative z-[2] flex flex-col items-center justify-center text-center min-h-[75vh] md:min-h-[90vh] px-6 py-20 md:px-12 md:py-32">
-      <motion.span
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="font-body text-[11px] uppercase tracking-[0.18em] text-gold mb-4 inline-flex items-center gap-2"
-      >
-        New Collection · 2025
-        <span className="block w-10 h-px bg-gold/60" />
-      </motion.span>
+    {/* Vertical brand mark — desktop */}
+    <div className="hidden md:flex absolute left-6 top-0 bottom-0 z-[3] flex-col items-center justify-between py-8 text-ivory/60">
+      <span className="vertical-text font-body text-[10px] tracking-[0.4em] uppercase">Nore'e — Est. 2024</span>
+      <div className="w-px h-24 bg-ivory/30" />
+      <span className="vertical-text font-body text-[10px] tracking-[0.4em] uppercase">Volume 01 · SS25</span>
+    </div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="font-display italic font-light leading-[1.05] text-white max-w-[700px]"
-        style={{ fontSize: 'clamp(2.2rem, 8vw, 5.5rem)' }}
-      >
-        Adorn yourself,<br />
-        <span className="text-gold">beautifully.</span>
-      </motion.h1>
+    {/* Frame inset (luxury magazine feel) */}
+    <div className="hidden md:block absolute inset-6 border border-ivory/15 pointer-events-none z-[2]" />
 
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="font-body font-light text-sm md:text-base text-white/85 max-w-[320px] md:max-w-[420px] leading-relaxed mt-4 mx-auto"
-      >
-        Handcrafted jewelry for the woman who adorns every moment.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="mt-8 flex flex-col items-center"
-      >
-        <Link
-          to="/shop"
-          className="inline-block w-full max-w-[280px] md:w-auto bg-gold text-bark font-body font-medium text-sm uppercase tracking-[0.1em] px-8 md:px-10 py-4 rounded-[2px] hover:bg-gold-dark hover:-translate-y-px transition-all duration-200 active:scale-[0.97] text-center"
+    {/* Content — left-aligned editorial on desktop, centered on mobile */}
+    <div className="relative z-[3] flex flex-col justify-end md:justify-center min-h-[78vh] md:min-h-[92vh] px-6 pb-14 md:pb-0 md:pl-24 md:pr-12 md:max-w-[920px]">
+      <div className="text-center md:text-left">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-3 justify-center md:justify-start mb-5"
         >
-          Shop Collection →
-        </Link>
-        <Link
-          to="/category/new-arrivals"
-          className="mt-4 font-body text-sm text-white/70 hover:text-gold hover:underline underline-offset-4 transition-colors"
-        >
-          View New Arrivals
-        </Link>
-      </motion.div>
+          <span className="block w-8 md:w-12 h-px bg-gold" />
+          <span className="font-body text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-gold">
+            The Heirloom Edit · 2025
+          </span>
+        </motion.div>
 
-      {/* Trust micro-row */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="mt-8 flex items-center gap-3 md:gap-5 text-white/75 font-body text-[11px] md:text-xs flex-wrap justify-center"
-      >
-        <span className="inline-flex items-center gap-1">
-          <Star size={12} className="fill-gold text-gold" /> 4.9
-        </span>
-        <span className="w-1 h-1 rounded-full bg-white/30" />
-        <span>2,400+ orders</span>
-        <span className="w-1 h-1 rounded-full bg-white/30" />
-        <span>Free COD</span>
-      </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="font-display font-light text-ivory leading-[0.95] tracking-tight"
+          style={{ fontSize: 'clamp(2.6rem, 9vw, 6.5rem)' }}
+        >
+          Adorned in
+          <br />
+          <span className="italic text-gold">quiet luxury.</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="font-body font-light text-base md:text-lg text-ivory/85 max-w-[340px] md:max-w-[440px] leading-relaxed mt-6 mx-auto md:mx-0"
+        >
+          Heirloom-inspired pieces, hand-finished in small batches for the woman who collects beauty.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.95, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-10 flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-6 justify-center md:justify-start"
+        >
+          <Link
+            to="/shop"
+            className="group relative inline-flex items-center justify-center w-full md:w-auto max-w-[280px] md:max-w-none bg-gold text-bark font-body font-medium text-[13px] uppercase tracking-[0.18em] px-9 py-4 rounded-[2px] hover:-translate-y-px transition-all duration-300 active:scale-[0.97] overflow-hidden"
+          >
+            <span className="relative z-[1]">Shop the Edit</span>
+            <span className="absolute inset-0 bg-gold-light translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out z-0" />
+          </Link>
+          <Link
+            to="/category/new-arrivals"
+            className="font-body text-sm text-ivory/80 hover:text-gold tracking-wide link-reveal"
+          >
+            Discover New Arrivals
+          </Link>
+        </motion.div>
+
+        {/* Trust micro-row */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-10 flex items-center gap-4 md:gap-6 text-ivory/70 font-body text-[11px] md:text-xs flex-wrap justify-center md:justify-start"
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <Star size={12} className="fill-gold text-gold" />
+            <span className="tracking-wide">4.9 / 5</span>
+          </span>
+          <span className="w-1 h-1 rounded-full bg-ivory/30" />
+          <span className="tracking-wide">2,400+ orders shipped</span>
+          <span className="hidden md:inline w-1 h-1 rounded-full bg-ivory/30" />
+          <span className="hidden md:inline tracking-wide">Cash on delivery, nationwide</span>
+        </motion.div>
+      </div>
     </div>
 
     {/* Scroll cue */}
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, y: [0, 6, 0] }}
-      transition={{ delay: 1.5, opacity: { duration: 0.8 }, y: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } }}
-      className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-[2] text-white/60 flex-col items-center gap-1"
+      transition={{ delay: 1.5, opacity: { duration: 0.8 }, y: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' } }}
+      className="hidden md:flex absolute bottom-8 right-10 z-[3] text-ivory/60 flex-col items-center gap-1.5"
     >
-      <span className="font-body text-[10px] uppercase tracking-[0.2em]">Scroll</span>
-      <ChevronDown size={16} />
+      <span className="font-body text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+      <ChevronDown size={14} />
     </motion.div>
   </section>
 );

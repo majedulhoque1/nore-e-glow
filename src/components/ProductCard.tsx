@@ -46,43 +46,40 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => navigate(`/product/${slug}`)}
-      className="group cursor-pointer bg-white border border-transparent hover:border-gold hover:shadow-card-hover transition-all duration-300 rounded-[2px]"
+      className="group cursor-pointer"
     >
-      <div className="aspect-[4/5] overflow-hidden relative">
+      <div className="aspect-[4/5] overflow-hidden relative bg-ivory-warm">
         {/* Primary image */}
         <img
           src={primary}
           alt={name}
-          className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+          className="w-full h-full object-cover transition-all duration-[900ms] ease-out group-hover:opacity-0 group-hover:scale-[1.02]"
         />
         {/* Secondary swap image */}
         {secondary && (
           <img
             src={secondary}
             alt={`${name} alternate view`}
-            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-[1.02]"
+            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-[900ms] ease-out scale-[1.04] group-hover:scale-[1.06]"
           />
-        )}
-        {!secondary && (
-          <div className="absolute inset-0 bg-bark/0 group-hover:bg-bark/0 transition-colors" />
         )}
 
         {/* Top-left badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1.5">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-[2]">
           {ribbon && (
-            <span className="bg-bark text-gold font-body text-[10px] px-2 py-0.5 uppercase tracking-wider">
+            <span className="bg-bark text-gold font-body text-[9.5px] px-2.5 py-1 uppercase tracking-[0.18em]">
               {ribbon}
             </span>
           )}
           {is_new_arrival && (
-            <span className="bg-crimson text-white font-body text-[10px] px-2 py-0.5 uppercase tracking-wider">
+            <span className="bg-crimson text-white font-body text-[9.5px] px-2.5 py-1 uppercase tracking-[0.18em]">
               New
             </span>
           )}
           {compare_at_price && (
-            <span className="bg-gold text-bark font-body text-[10px] px-2 py-0.5 uppercase tracking-wider">
+            <span className="bg-gold text-bark font-body text-[9.5px] px-2.5 py-1 uppercase tracking-[0.18em]">
               Sale
             </span>
           )}
@@ -92,10 +89,10 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
         <button
           onClick={handleHeart}
           aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
-          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center hover:bg-white transition-colors active:scale-90"
+          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-ivory/95 backdrop-blur flex items-center justify-center hover:bg-ivory transition-all active:scale-90 z-[2] shadow-soft"
         >
           <Heart
-            size={14}
+            size={15}
             className={wished ? 'fill-crimson text-crimson' : 'text-bark-mid'}
           />
         </button>
@@ -103,27 +100,28 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
         {/* Quick-add (desktop only) */}
         <button
           onClick={handleQuickAdd}
-          className="hidden md:flex absolute left-2 right-2 bottom-2 h-9 items-center justify-center gap-1.5 bg-bark text-ivory font-body text-[11px] uppercase tracking-[0.12em] rounded-[2px] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-gold hover:text-bark"
+          className="hidden md:flex absolute left-3 right-3 bottom-3 h-10 items-center justify-center gap-2 bg-bark/95 backdrop-blur text-ivory font-body text-[11px] uppercase tracking-[0.18em] rounded-[2px] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 hover:bg-gold hover:text-bark z-[2]"
         >
           {added ? <><Check size={14} /> Added</> : <><Plus size={14} /> Quick Add</>}
         </button>
       </div>
 
-      <div className="p-3">
-        <p className="font-display font-medium text-[1.05rem] text-bark leading-snug line-clamp-1">{name}</p>
-        <div className="flex items-baseline gap-2 mt-1 flex-wrap">
-          <span className="font-body font-semibold text-gold">৳{price}</span>
+      <div className="pt-4 pb-2">
+        <p className="font-display font-medium text-[1.1rem] text-bark leading-snug line-clamp-1 group-hover:text-gold-dark transition-colors">{name}</p>
+        <div className="flex items-baseline gap-2 mt-1.5 flex-wrap">
+          <span className="font-body font-semibold text-bark tracking-wide">৳{price}</span>
           {compare_at_price && (
             <>
               <span className="font-body text-bark-muted line-through text-sm">৳{compare_at_price}</span>
               {savings > 0 && (
-                <span className="font-body text-[10px] text-crimson font-medium">Save ৳{savings}</span>
+                <span className="font-body text-[10px] text-crimson font-medium uppercase tracking-wider">Save ৳{savings}</span>
               )}
             </>
           )}
         </div>
-        <p className="mt-2 text-[11px] font-body text-bark-muted border border-border rounded-sm px-2 py-0.5 w-fit">
-          COD Available
+        <p className="mt-2.5 text-[10px] font-body text-bark-mid uppercase tracking-[0.16em] flex items-center gap-1.5">
+          <span className="w-1 h-1 rounded-full bg-gold" />
+          Cash on delivery
         </p>
       </div>
     </motion.div>

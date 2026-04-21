@@ -90,32 +90,35 @@ const FeaturedCollections = () => {
     <motion.section
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="py-16 md:py-24 px-4 md:px-8 max-w-[1400px] mx-auto"
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="py-20 md:py-32 px-4 md:px-8 max-w-[1400px] mx-auto relative"
     >
-      <div className="flex flex-col items-center">
-        <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold">
-          Curated edits
-        </span>
-        <h2 className="font-display font-medium text-center text-bark mt-2" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.4rem)' }}>
-          Shop by Collection
+      <div className="flex flex-col items-center text-center mb-12 md:mb-16">
+        <div className="flex items-center gap-3">
+          <span className="numeral text-gold/70 text-3xl md:text-4xl">04</span>
+          <span className="font-body text-[11px] uppercase tracking-[0.28em] text-gold">
+            Curated edits
+          </span>
+        </div>
+        <h2 className="font-display font-light text-bark mt-3 leading-[1.05]" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>
+          Shop by <span className="italic text-gold">collection.</span>
         </h2>
-        <div className="w-12 h-px bg-gold/50 mt-3" />
-        <p className="font-body font-light text-bark-mid text-center mt-3 mb-10">
-          From heirloom gold to everyday charm
+        <div className="rule-gold-solid w-10 mt-5 opacity-50" />
+        <p className="font-body font-light text-bark-mid text-center mt-5 max-w-[440px]">
+          From heirloom gold to everyday charm — find a category that speaks to your mood.
         </p>
       </div>
 
       {/* Desktop asymmetric grid */}
       {categories.length > 0 && (
-        <div className="hidden md:grid md:grid-cols-3 gap-4 md:gap-5">
-          {featured && <Tile cat={featured} className="md:row-span-2 md:col-span-2 aspect-[4/5] md:aspect-auto md:min-h-[520px]" />}
+        <div className="hidden md:grid md:grid-cols-3 gap-5 md:gap-6">
+          {featured && <Tile cat={featured} className="md:row-span-2 md:col-span-2 aspect-[4/5] md:aspect-auto md:min-h-[560px]" />}
           {stacked.map(cat => (
-            <Tile key={cat.id} cat={cat} className="aspect-[4/3] md:aspect-auto md:min-h-[252px]" />
+            <Tile key={cat.id} cat={cat} className="aspect-[4/3] md:aspect-auto md:min-h-[270px]" />
           ))}
           {rest.map(cat => (
-            <Tile key={cat.id} cat={cat} className="aspect-[4/3] md:aspect-auto md:min-h-[252px]" />
+            <Tile key={cat.id} cat={cat} className="aspect-[4/3] md:aspect-auto md:min-h-[270px]" />
           ))}
         </div>
       )}
@@ -123,7 +126,7 @@ const FeaturedCollections = () => {
       {/* Mobile snap-scroll carousel */}
       <div className="md:hidden flex gap-3 overflow-x-auto hide-scrollbar pb-2 snap-x snap-mandatory -mx-4 px-4">
         {categories.map(cat => (
-          <div key={cat.id} className="snap-start flex-shrink-0 w-[220px] h-[280px]">
+          <div key={cat.id} className="snap-start flex-shrink-0 w-[230px] h-[300px]">
             <Tile cat={cat} className="w-full h-full" />
           </div>
         ))}

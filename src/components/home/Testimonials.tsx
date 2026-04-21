@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
 
 const quotes = [
   {
@@ -29,54 +29,65 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6 }}
-      className="bg-ivory-warm border-y border-border py-16 md:py-24 px-6"
-    >
-      <div className="max-w-[760px] mx-auto text-center">
-        <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold">
-          Loved by 2,400+ customers
-        </span>
-        <div className="flex justify-center mt-3 gap-0.5">
+    <section className="relative bg-blush-warm border-y border-gold/15 py-20 md:py-32 px-6 overflow-hidden texture-grain">
+      {/* Decorative quote mark */}
+      <Quote className="absolute top-10 left-10 md:top-16 md:left-20 text-gold/15" size={80} />
+      <Quote className="absolute bottom-10 right-10 md:bottom-16 md:right-20 text-gold/15 rotate-180" size={80} />
+
+      <div className="max-w-[820px] mx-auto text-center relative z-[1]">
+        <div className="flex items-center justify-center gap-3">
+          <span className="block w-10 h-px bg-gold" />
+          <span className="font-body text-[11px] uppercase tracking-[0.28em] text-gold">
+            Our Customers
+          </span>
+          <span className="block w-10 h-px bg-gold" />
+        </div>
+        <p className="font-display italic font-light text-bark-mid mt-4 text-sm">
+          Loved by 2,400+ women across Bangladesh
+        </p>
+        <div className="flex justify-center mt-4 gap-1">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} size={14} className="fill-gold text-gold" />
+            <Star key={i} size={16} className="fill-gold text-gold" />
           ))}
         </div>
 
-        <div className="mt-8 min-h-[180px] md:min-h-[160px] relative">
+        <div className="mt-12 min-h-[200px] md:min-h-[180px] relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <blockquote className="font-display italic font-light text-bark leading-snug" style={{ fontSize: 'clamp(1.3rem, 2.4vw, 1.75rem)' }}>
+              <blockquote className="font-display italic font-light text-bark leading-[1.25]" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.1rem)' }}>
                 &ldquo;{quotes[idx].text}&rdquo;
               </blockquote>
-              <p className="font-body text-sm text-bark-mid mt-5">
-                — {quotes[idx].name}, <span className="text-bark-muted">{quotes[idx].city}</span>
-              </p>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <div className="w-8 h-px bg-gold/60" />
+                <p className="font-body text-xs uppercase tracking-[0.22em] text-bark">
+                  {quotes[idx].name}
+                </p>
+                <span className="font-body text-xs text-bark-muted">·</span>
+                <p className="font-body text-xs text-bark-mid italic">{quotes[idx].city}</p>
+                <div className="w-8 h-px bg-gold/60" />
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="flex justify-center gap-2 mt-6">
+        <div className="flex justify-center gap-2 mt-8">
           {quotes.map((_, i) => (
             <button
               key={i}
               onClick={() => setIdx(i)}
               aria-label={`Show testimonial ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all ${i === idx ? 'w-8 bg-gold' : 'w-1.5 bg-bark-muted/30'}`}
+              className={`h-1 rounded-full transition-all duration-500 ${i === idx ? 'w-10 bg-gold' : 'w-1 bg-bark-muted/30'}`}
             />
           ))}
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 
