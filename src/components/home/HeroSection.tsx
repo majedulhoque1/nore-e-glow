@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Star } from 'lucide-react';
-import heroStillLife from '@/assets/hero-still-life.jpg';
+import heroStillLife from '@/assets/hero-beaded-necklace.png';
 
 const HeroSection = () => (
   <section className="relative w-full bg-ivory overflow-hidden">
@@ -162,7 +162,7 @@ const HeroSection = () => (
         >
           <img
             src={heroStillLife}
-            alt="Handcrafted artisan jewelry — hammered silver pendant with semi-precious stones, hand-strung beaded necklace, brass filigree ring"
+            alt="Handcrafted Nore'e beaded necklace duo in black and white crystal beads with gold accents on satin red drape"
             className="w-full h-full object-cover"
             loading="eager"
             width={1080}
@@ -174,16 +174,16 @@ const HeroSection = () => (
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.3 }}
-            className="absolute bottom-6 left-6 lg:bottom-8 lg:left-8 max-w-[200px] bg-ivory/95 backdrop-blur-sm px-4 py-3 shadow-lg"
+            className="absolute bottom-6 left-6 lg:bottom-8 lg:left-8 max-w-[220px] bg-ivory/95 backdrop-blur-sm px-4 py-3 shadow-lg"
           >
             <div className="font-body text-[10px] uppercase tracking-[0.25em] text-bark-muted">
               Featured
             </div>
             <div className="font-display italic text-bark text-base mt-0.5 leading-tight">
-              The Talisman pendant
+              Noir & Ivory beaded choker
             </div>
             <div className="font-body text-[11px] text-gold mt-2">
-              Hammered silver · moonstone
+              Hand-strung crystal · gold-tone
             </div>
           </motion.div>
 
