@@ -14,9 +14,9 @@ const HeroSection = () => (
       }}
     />
 
-    <div className="relative max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-[88vh] lg:min-h-[86vh]">
+    <div className="relative max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 lg:min-h-[86vh]">
       {/* LEFT — Editorial text panel */}
-      <div className="lg:col-span-7 flex flex-col justify-between px-6 md:px-12 lg:px-16 py-12 lg:py-20 order-2 lg:order-1">
+      <div className="lg:col-span-7 flex flex-col justify-between px-5 md:px-12 lg:px-16 py-7 md:py-12 lg:py-20 order-2 lg:order-1">
         {/* Top meta row */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
@@ -32,7 +32,7 @@ const HeroSection = () => (
         </motion.div>
 
         {/* Centerpiece content */}
-        <div className="flex-1 flex flex-col justify-center py-12 lg:py-0 max-w-[640px]">
+        <div className="flex-1 flex flex-col justify-center py-2 md:py-12 lg:py-0 max-w-[640px]">
           {/* Issue number — oversized */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -53,7 +53,7 @@ const HeroSection = () => (
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="inline-flex items-center gap-2 self-start mb-8"
+            className="inline-flex items-center gap-2 self-start mb-4 md:mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-crimson" />
             <span className="font-body text-[11px] uppercase tracking-[0.25em] text-bark-mid">
@@ -67,7 +67,7 @@ const HeroSection = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-bark leading-[0.92] tracking-[-0.02em]"
-            style={{ fontSize: 'clamp(2.8rem, 7.5vw, 6rem)' }}
+            style={{ fontSize: 'clamp(2.1rem, 7.5vw, 6rem)' }}
           >
             Worn slowly,
             <br />
@@ -84,7 +84,7 @@ const HeroSection = () => (
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
-            className="font-body text-[15px] md:text-base text-bark-mid leading-[1.7] mt-8 max-w-[460px]"
+            className="font-body text-[14px] md:text-base text-bark-mid leading-[1.6] mt-4 md:mt-8 max-w-[460px]"
           >
             Each piece is shaped, set and finished by a single pair of hands —
             because jewelry meant to outlive a generation deserves the time of
@@ -96,7 +96,7 @@ const HeroSection = () => (
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.9 }}
-            className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5"
+            className="mt-6 md:mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5"
           >
             <Link
               to="/shop"
@@ -149,7 +149,7 @@ const HeroSection = () => (
       </div>
 
       {/* RIGHT — Image panel as art frame */}
-      <div className="lg:col-span-5 relative order-1 lg:order-2 min-h-[55vh] lg:min-h-full">
+      <div className="lg:col-span-5 relative order-1 lg:order-2 h-[34vh] md:h-[55vh] lg:h-auto lg:min-h-full">
         {/* Bark background extends behind */}
         <div className="absolute inset-0 bg-bark" />
 
