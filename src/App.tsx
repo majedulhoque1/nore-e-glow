@@ -14,6 +14,11 @@ import MysteryCollectionPage from "./pages/MysteryCollectionPage.tsx";
 import SurpriseMysteryPage from "./pages/SurpriseMysteryPage.tsx";
 import BuildYourBoxPage from "./pages/BuildYourBoxPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AdminLogin from "./pages/admin/AdminLogin.tsx";
+import AdminProductsList from "./pages/admin/AdminProductsList.tsx";
+import AdminProductEdit from "./pages/admin/AdminProductEdit.tsx";
+import AdminBulkPrices from "./pages/admin/AdminBulkPrices.tsx";
+import AdminGuard from "./components/admin/AdminGuard.tsx";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +47,11 @@ const App = () => (
             <Route path="/mystery-collection" element={<MysteryCollectionPage />} />
             <Route path="/mystery-collection/surprise" element={<SurpriseMysteryPage />} />
             <Route path="/mystery-collection/build" element={<BuildYourBoxPage />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminGuard><AdminProductsList /></AdminGuard>} />
+            <Route path="/admin/bulk-prices" element={<AdminGuard><AdminBulkPrices /></AdminGuard>} />
+            <Route path="/admin/products/new" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
+            <Route path="/admin/products/:id" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
