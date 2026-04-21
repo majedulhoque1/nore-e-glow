@@ -171,7 +171,7 @@ const NavigationBar = () => {
                 <X size={24} />
               </button>
               <div className="flex flex-col gap-6">
-                {navLinks.map(link => (
+                {navLinks.filter(l => !l.accent).map(link => (
                   <Link
                     key={link.href}
                     to={link.href}
