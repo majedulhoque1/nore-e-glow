@@ -9,6 +9,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/context/CartContext';
 import { SEOHead } from '@/components/SEOHead';
 
+const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
+  <div className="mb-5">
+    <label className="block font-body font-medium text-sm text-bark-mid mb-1.5">{label}</label>
+    {children}
+    {error && <p className="font-body text-xs text-crimson mt-1">{error}</p>}
+  </div>
+);
+
 const DISTRICTS = [
   'Bagerhat','Bandarban','Barguna','Barisal','Bhola','Bogura','Brahmanbaria',
   'Chandpur','Chapainawabganj','Chattogram','Chuadanga',"Cox's Bazar",'Cumilla',
@@ -126,14 +134,6 @@ const CheckoutPage = () => {
   };
 
   if (totalItems === 0) return null;
-
-  const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
-    <div className="mb-5">
-      <label className="block font-body font-medium text-sm text-bark-mid mb-1.5">{label}</label>
-      {children}
-      {error && <p className="font-body text-xs text-crimson mt-1">{error}</p>}
-    </div>
-  );
 
   const inputClass = (field: string) =>
     `w-full h-[48px] border rounded-[2px] px-4 font-body text-sm text-bark bg-transparent transition-colors focus:outline-none focus:border-gold ${
