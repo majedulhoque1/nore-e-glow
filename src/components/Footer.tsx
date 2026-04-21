@@ -92,7 +92,10 @@ const Footer = () => {
 
       <div className="border-t border-bark-mid/30 py-6 px-6 md:px-8 max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
         <span className="font-body text-xs text-bark-muted">© 2025 Nore'e. All rights reserved.</span>
-        <span className="font-body text-xs text-bark-muted">Made with care in Dhaka</span>
+        <div className="flex items-center gap-4">
+          <Link to="/admin" className="font-body text-[10px] text-bark-muted/40 hover:text-bark-muted transition-colors">admin</Link>
+          <span className="font-body text-xs text-bark-muted">Made with care in Dhaka</span>
+        </div>
       </div>
     </footer>
   );
