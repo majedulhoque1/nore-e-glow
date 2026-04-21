@@ -13,7 +13,7 @@ const HeroSection = () => (
       transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       src={heroImageDesktop}
       alt="Nore'e editorial — South Asian woman wearing gold jewelry in golden hour"
-      className="hidden md:block absolute inset-0 w-full h-full object-cover object-center animate-ken-burns"
+      className="hidden md:block absolute inset-0 w-full h-full object-cover object-center animate-ken-burns blur-[3px]"
     />
     <motion.img
       initial={{ opacity: 0 }}
@@ -21,7 +21,7 @@ const HeroSection = () => (
       transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       src={heroImageMobile}
       alt="Nore'e editorial — South Asian woman wearing gold jewelry"
-      className="block md:hidden absolute inset-0 w-full h-full object-cover object-center animate-ken-burns"
+      className="block md:hidden absolute inset-0 w-full h-full object-cover object-center animate-ken-burns blur-[4px]"
     />
 
     {/* Editorial overlay — directional + vignette + bottom-left CTA scrim */}
