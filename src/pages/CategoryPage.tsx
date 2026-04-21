@@ -61,6 +61,7 @@ const CategoryPage = () => {
         description={`Shop Nore'e ${categoryName} — handcrafted pieces delivered cash on delivery across Bangladesh.`}
         url={`/category/${slug}`}
       />
+      <AnnouncementBar />
       <NavigationBar />
 
       <div className="bg-ivory-warm border-b border-border py-10 px-4 md:px-8">
@@ -118,6 +119,7 @@ const CategoryPage = () => {
       </main>
 
       <Footer />
+      <WhatsAppFAB />
     </div>
   );
 };
