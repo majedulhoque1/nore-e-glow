@@ -205,7 +205,7 @@ const HeroSection = () => (
 
     {/* Bottom marquee — running tagline */}
     <div className="relative border-y border-bark/10 bg-ivory-warm overflow-hidden">
-      <div className="flex animate-marquee whitespace-nowrap py-4">
+      <div className="flex animate-marquee-x whitespace-nowrap py-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <span
             key={i}
