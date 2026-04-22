@@ -5,7 +5,6 @@ import HeroSection from '@/components/home/HeroSection';
 import TrustBar from '@/components/home/TrustBar';
 import FeaturedCollections from '@/components/home/FeaturedCollections';
 import BuildBoxPromo from '@/components/home/BuildBoxPromo';
-import ShopTheLook from '@/components/home/ShopTheLook';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import EditorialBanner from '@/components/home/EditorialBanner';
 import InstagramStrip from '@/components/home/InstagramStrip';
@@ -19,9 +18,8 @@ const Index = () => (
     <NavigationBar />
     <HeroSection />
     <TrustBar />
-    <FeaturedCollections />
     <BuildBoxPromo />
-    <ShopTheLook />
+    <FeaturedCollections />
     <FeaturedProducts />
     <EditorialBanner />
     <Testimonials />
