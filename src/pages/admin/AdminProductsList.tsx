@@ -97,7 +97,60 @@ const AdminProductsList = () => {
         </select>
       </div>
 
-      <div className="bg-ivory-warm border border-bark/15 rounded-[4px] overflow-hidden">
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-3">
+        {loading && (
+          <div className="text-center py-8 text-muted-foreground bg-ivory-warm border border-bark/15 rounded-[4px]">Loading…</div>
+        )}
+        {!loading && filtered.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground bg-ivory-warm border border-bark/15 rounded-[4px]">No products</div>
+        )}
+        {!loading && filtered.map(p => (
+          <div key={p.id} className="bg-ivory-warm border border-bark/15 rounded-[4px] p-3 flex gap-3">
+            {p.images?.[0] ? (
+              <img src={p.images[0]} alt={p.name} className="w-16 shrink-0 object-cover rounded" style={{ aspectRatio: '4/5' }} />
+            ) : (
+              <div className="w-16 shrink-0 bg-muted rounded" style={{ aspectRatio: '4/5' }} />
+            )}
+            <div className="flex-1 min-w-0 flex flex-col gap-1">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-body font-medium text-bark truncate">{p.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{p.category}</p>
+                </div>
+                <div className="flex gap-1 shrink-0">
+                  {p.is_featured && <Star size={14} className="text-gold" />}
+                  {p.is_new_arrival && <Sparkles size={14} className="text-gold" />}
+                </div>
+              </div>
+              <div className="flex items-baseline gap-2 text-sm">
+                <span className="font-medium text-bark">৳{p.price}</span>
+                {p.compare_at_price && (
+                  <span className="text-xs text-muted-foreground line-through">৳{p.compare_at_price}</span>
+                )}
+                <span className="text-xs text-muted-foreground ml-auto">Stock: {p.stock_qty ?? 0}</span>
+              </div>
+              <div className="flex gap-2 mt-1">
+                <Button asChild variant="outline" size="sm" className="flex-1 h-8">
+                  <Link to={`/admin/products/${p.id}`}><Pencil size={12} /> Edit</Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-destructive hover:text-destructive"
+                  onClick={() => setDeleteId(p.id)}
+                  aria-label="Delete"
+                >
+                  <Trash2 size={12} />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block bg-ivory-warm border border-bark/15 rounded-[4px] overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
