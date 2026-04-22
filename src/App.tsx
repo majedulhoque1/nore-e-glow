@@ -18,6 +18,7 @@ import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminProductsList from "./pages/admin/AdminProductsList.tsx";
 import AdminProductEdit from "./pages/admin/AdminProductEdit.tsx";
 import AdminBulkPrices from "./pages/admin/AdminBulkPrices.tsx";
+import AdminChangePassword from "./pages/admin/AdminChangePassword.tsx";
 import AdminGuard from "./components/admin/AdminGuard.tsx";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/admin/bulk-prices" element={<AdminGuard><AdminBulkPrices /></AdminGuard>} />
             <Route path="/admin/products/new" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
             <Route path="/admin/products/:id" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
+            <Route path="/admin/change-password" element={<AdminGuard><AdminChangePassword /></AdminGuard>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Package, DollarSign, Plus } from 'lucide-react';
+import { LogOut, Package, DollarSign, Plus, KeyRound } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 
@@ -32,6 +32,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             </NavLink>
             <NavLink to="/admin/products/new" className={navItem}>
               <Plus size={14} className="inline mr-1" /> New
+            </NavLink>
+            <NavLink to="/admin/change-password" className={navItem}>
+              <KeyRound size={14} className="inline mr-1" /> Password
             </NavLink>
           </nav>
           <Button variant="outline" size="sm" onClick={handleLogout}>
