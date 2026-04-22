@@ -105,6 +105,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                 <Icon size={14} className="inline mr-1" /> {label}
               </NavLink>
             ))}
+            <div className="w-px h-6 bg-bark/20 mx-2" />
+            <NavLink to={backToSiteLink.to} className={desktopNavItem}>
+              <backToSiteLink.icon size={14} className="inline mr-1" /> {backToSiteLink.label}
+            </NavLink>
           </nav>
 
           {/* Desktop logout */}
