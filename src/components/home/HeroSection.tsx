@@ -107,7 +107,7 @@ const HeroSection = () => (
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute inset-0 lg:inset-y-16 lg:inset-x-0 lg:right-12 overflow-hidden"
+          className="absolute inset-0 overflow-hidden"
         >
           <img
             src={heroImage}
