@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Package, DollarSign, Plus, KeyRound, Menu } from 'lucide-react';
+import { LogOut, Package, DollarSign, Plus, KeyRound, Menu, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +18,8 @@ const navLinks = [
   { to: '/admin/products/new', label: 'New product', icon: Plus },
   { to: '/admin/change-password', label: 'Password', icon: KeyRound },
 ];
+
+const backToSiteLink = { to: '/', label: 'Back to Website', icon: ExternalLink };
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -69,6 +71,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     </NavLink>
                   </SheetClose>
                 ))}
+                <div className="my-2 border-t border-bark/15" />
+                <SheetClose asChild>
+                  <NavLink to={backToSiteLink.to} className={mobileNavItem}>
+                    <backToSiteLink.icon size={18} />
+                    {backToSiteLink.label}
+                  </NavLink>
+                </SheetClose>
               </nav>
               <div className="p-4 border-t border-bark/15">
                 <Button
@@ -96,6 +105,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                 <Icon size={14} className="inline mr-1" /> {label}
               </NavLink>
             ))}
+            <div className="w-px h-6 bg-bark/20 mx-2" />
+            <NavLink to={backToSiteLink.to} className={desktopNavItem}>
+              <backToSiteLink.icon size={14} className="inline mr-1" /> {backToSiteLink.label}
+            </NavLink>
           </nav>
 
           {/* Desktop logout */}
