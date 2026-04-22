@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Package, DollarSign, Plus, KeyRound, Menu } from 'lucide-react';
+import { LogOut, Package, DollarSign, Plus, KeyRound, Menu, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +18,8 @@ const navLinks = [
   { to: '/admin/products/new', label: 'New product', icon: Plus },
   { to: '/admin/change-password', label: 'Password', icon: KeyRound },
 ];
+
+const backToSiteLink = { to: '/', label: 'Back to Website', icon: ExternalLink };
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
