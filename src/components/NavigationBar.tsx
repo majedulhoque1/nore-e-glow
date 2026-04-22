@@ -38,11 +38,13 @@ const NavigationBar = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const NavItem = ({ href, label, glyph }: { href: string; label: string; glyph?: string }) => (
+  const NavItem = ({ href, label, glyph, accent }: { href: string; label: string; glyph?: string; accent?: boolean }) => (
     <Link
       to={href}
       className={`relative font-body text-[11.5px] uppercase tracking-[0.18em] py-1 transition-colors ${
-        isActive(href) ? 'text-bark' : 'text-bark-mid hover:text-gold'
+        accent
+          ? isActive(href) ? 'text-gold-dark' : 'text-gold hover:text-gold-dark'
+          : isActive(href) ? 'text-bark' : 'text-bark-mid hover:text-gold'
       }`}
     >
       {glyph && <span className="text-gold mr-1.5">{glyph}</span>}
@@ -65,7 +67,7 @@ const NavigationBar = () => {
             {navLinks.map(link => (
               <NavItem key={link.href} {...link} />
             ))}
-            <NavItem {...discoverLink} glyph="✦" />
+            <NavItem {...discoverLink} glyph="✦" accent />
           </nav>
 
           {/* Center — wordmark */}
@@ -219,7 +221,7 @@ const NavigationBar = () => {
                   <Link
                     to={discoverLink.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="font-display italic text-[24px] text-bark hover:text-gold transition-colors leading-none inline-flex items-center gap-2"
+                    className="font-display italic text-[24px] text-gold hover:text-gold-dark transition-colors leading-none inline-flex items-center gap-2"
                   >
                     <span className="text-gold">✦</span>
                     {discoverLink.label}
