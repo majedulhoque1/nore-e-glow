@@ -3,7 +3,6 @@ import AnnouncementBar from '@/components/AnnouncementBar';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
 import HeroSection from '@/components/home/HeroSection';
 import TrustBar from '@/components/home/TrustBar';
-import FeaturedCollections from '@/components/home/FeaturedCollections';
 import BuildBoxPromo from '@/components/home/BuildBoxPromo';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import EditorialBanner from '@/components/home/EditorialBanner';
@@ -19,11 +18,10 @@ const Index = () => (
     <HeroSection />
     <TrustBar />
     <BuildBoxPromo />
-    <FeaturedCollections />
     <FeaturedProducts />
     <EditorialBanner />
-    <Testimonials />
     <NewArrivals />
+    <Testimonials />
     <InstagramStrip />
     <Footer />
     <WhatsAppFAB />
