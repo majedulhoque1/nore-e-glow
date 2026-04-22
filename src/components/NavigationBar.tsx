@@ -14,7 +14,7 @@ const navLinks = [
   { label: 'New', href: '/category/new-arrivals' },
 ];
 
-const discoverLink = { label: 'Build Your Box', href: '/mystery-collection/build' };
+const discoverLink = { label: 'Mystery Collection', href: '/mystery-collection' };
 
 const NavigationBar = () => {
   const { totalItems } = useCart();
