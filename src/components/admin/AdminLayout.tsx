@@ -71,6 +71,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     </NavLink>
                   </SheetClose>
                 ))}
+                <div className="my-2 border-t border-bark/15" />
+                <SheetClose asChild>
+                  <NavLink to={backToSiteLink.to} className={mobileNavItem}>
+                    <backToSiteLink.icon size={18} />
+                    {backToSiteLink.label}
+                  </NavLink>
+                </SheetClose>
               </nav>
               <div className="p-4 border-t border-bark/15">
                 <Button
