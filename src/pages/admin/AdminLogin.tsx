@@ -77,6 +77,15 @@ const AdminLogin = () => {
             {submitting ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>
+        <div className="mt-6 pt-6 border-t border-bark/10">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 font-body text-sm text-bark/70 hover:text-bark transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Back to website
+          </Link>
+        </div>
       </div>
     </div>
   );
