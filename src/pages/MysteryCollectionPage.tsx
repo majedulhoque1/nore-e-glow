@@ -32,7 +32,7 @@ const MysteryCollectionPage = () => {
         />
         {/* Dark gradient overlays for legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-bark/70 via-bark/55 to-bark/85" />
-        <div className="absolute inset-0 bg-gradient-to-r from-bark/60 via-transparent to-bark/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-bark/60 via-transparent to-bark/40 opacity-100 shadow rounded-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -40,7 +40,7 @@ const MysteryCollectionPage = () => {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-[1] flex flex-col items-center text-center max-w-[600px]"
         >
-          <span className="font-body text-[11px] uppercase tracking-[0.18em] text-gold inline-flex items-center gap-2">
+          <span className="uppercase tracking-[0.18em] text-gold inline-flex items-center gap-2 text-sm mx-0 px-0 py-0 my-[10px] font-sans">
             <Sparkles size={14} /> Mystery Collection
           </span>
           <h1 className="font-display italic font-light text-ivory mt-4 leading-[1.05] drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.4rem)' }}>
