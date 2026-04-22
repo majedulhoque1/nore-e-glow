@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { ArrowLeft } from 'lucide-react';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -76,6 +77,15 @@ const AdminLogin = () => {
             {submitting ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>
+        <div className="mt-6 pt-6 border-t border-bark/10">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 font-body text-sm text-bark/70 hover:text-bark transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Back to website
+          </Link>
+        </div>
       </div>
     </div>
   );
