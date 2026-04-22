@@ -1,53 +1,69 @@
-## Admin dashboard for product management
+## Refine the header into a simple, classic editorial UI
 
-A password-protected `/admin` area where you can manage products end-to-end: create new ones, edit prices, swap images, and delete. Locked behind your personal Supabase login so the storefront stays no-login for shoppers.
+The current header has three stacked rows (announcement bar + utility row + main row) and mixes a pill-shaped accent button, a search field, three icons, and asymmetric nav clusters. It feels busy. The plan below tightens it into a calm, classic e-commerce header inspired by editorial jewellery houses (Tiffany, Mejuri, Missoma): centered wordmark, balanced nav on either side, icon-only utilities, and a single slim promo strip.
 
-### What you'll get
+### Visual goals
 
-**Auth**
+- Quiet, symmetrical, generous whitespace
+- One promo strip (not two)
+- Centered wordmark as the anchor
+- Icon-only right cluster, no inline search field
+- Subtle gold accent reserved for the active link underline and cart badge only
+- Mobile: clean three-column bar with a refined slide-in drawer
 
-- A `/admin/login` page with email + password.
-- One admin account (yours), created by me directly in Supabase — no public signup.
-- A `user_roles` table + `has_role()` security-definer function so only the `admin` role can read/write products. Anyone else hitting `/admin` is redirected to login.
-- Logout button in the admin header.
+### Layout (desktop ≥ md)
 
-**Admin home** — `/admin`
+```text
+┌───────────────────────────────────────────────────────────────────┐
+│  ✦  Complimentary cash-on-delivery, nationwide   ✦   (rotating)   │  ← single bark strip, h-9
+├───────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│   Shop   Rings   Bracelets   New        NORE'E        ⌕  ♡  ⌂  ⛯  │  ← h-20
+│                                  (centered wordmark)              │
+│                                                                   │
+├───────────────────────────────────────────────────────────────────┤
+│   ─────────── hairline gold rule ───────────                      │
+└───────────────────────────────────────────────────────────────────┘
+```
 
-- Table of all products: thumbnail, name, category, price, compare-at, stock, featured/new flags.
-- Search by name, filter by category.
-- Buttons: **New product**, **Edit**, **Delete** (with confirm dialog).
+- Replace the dark utility row + announcement bar with a single slim bark strip (keeps the rotating messages, drops Track Order/FAQ/WhatsApp links — those live in the footer already).
+- Main row height 80px, ivory/70 + backdrop blur (kept), bottom border swapped for the existing `.rule-gold` hairline for a couture feel.
+- Left nav: Shop · Rings · Bracelets · New Arrivals — uppercase, tracking-[0.18em], 11.5px, bark-mid, gold on hover, gold underline when active.
+- "Build Your Box" demoted from a colored pill to a regular nav item with a small ✦ glyph prefix so the bar reads evenly. Keeps discoverability without the loud button.
+- Center: wordmark only (no logo mark on desktop) in Cormorant Garamond, 28px, tracking-tight. Click → home.
+- Right: four icon buttons at 18px, 20px gaps — Search (opens modal), Wishlist, Account-placeholder removed, Cart with gold dot badge (no number circle until count >0; then tiny gold pill).
+- Remove the inline search input entirely — the search modal (already keyboard-shortcut enabled) is the single search entry point. Cleaner, more classic.
 
-**Product editor** — `/admin/products/new` and `/admin/products/:id`
+### Layout (mobile <md)
 
-- Fields: name, slug (auto from name, editable), category (dropdown from `categories` table), description, price, compare-at price, stock qty, is_featured, is_new_arrival.
-- **Image manager**: drag-drop or click to upload (multi-file). Thumbnails of current images with remove (×) button and drag-to-reorder. First image = primary.
-- Save / Cancel.
+```text
+┌──────────────────────────────────────────┐
+│  ✦  Free delivery in Dhaka  ✦            │  promo strip
+├──────────────────────────────────────────┤
+│  ☰          NORE'E              ⌕   ⛯    │  h-14
+├──────────────────────────────────────────┤
+```
 
-**Bulk price tool** — `/admin/bulk-prices`
+- Three-column grid so the wordmark is perfectly centered regardless of icon count.
+- Drawer redesign: ivory background (not dark bark) for consistency with the classic feel; large serif links; small uppercase section labels ("Shop", "Discover"); Build Your Box listed under Discover with the ✦ glyph; close affordance top-right; subtle gold hairline dividers.
 
-- One-screen table with every product and an inline price input. Edit any number of rows, click **Save all** to update at once.
+### Behavioral details
 
-### Technical details
+- Sticky header keeps backdrop blur.
+- Active link: gold underline (1px, full link width) — already partially implemented; standardize with `link-reveal` style.
+- Cart badge: shows only when totalItems > 0; small gold circle, white numerals, `-top-1 -right-2`.
+- Mini-cart hover preview kept as-is.
+- Cmd/Ctrl+K to open search kept.
 
-- **Auth**: Supabase email/password. New `user_roles` table (`user_id`, `role` enum `admin|user`) with RLS; `has_role(uid, role)` security-definer function.
-- **RLS migration on `products**`: add `INSERT`, `UPDATE`, `DELETE` policies gated by `has_role(auth.uid(), 'admin')`. Public `SELECT` stays as-is so the storefront keeps working.
-- **Storage RLS on `product-images` bucket**: `INSERT` / `UPDATE` / `DELETE` only for admin role. Public read stays.
-- **Routes** added to `App.tsx`: `/admin/login`, `/admin` (list), `/admin/products/new`, `/admin/products/:id`, `/admin/bulk-prices`. Wrapped in an `AdminGuard` that checks session + admin role.
-- **Files created**:
-  - `src/pages/admin/AdminLogin.tsx`, `AdminProductsList.tsx`, `AdminProductEdit.tsx`, `AdminBulkPrices.tsx`
-  - `src/components/admin/AdminGuard.tsx`, `AdminLayout.tsx`, `ImageUploader.tsx`
-  - `src/hooks/useAdminAuth.ts`
-  - Migration: `user_roles` table + `has_role` + product/storage policies
-- **Image upload**: uses Supabase Storage `product-images` bucket (already public). Files saved as `products/{productId}/{uuid}.{ext}`. URLs stored in `products.images[]`.
-- **Out of scope**: editing categories, mystery box, orders. Storefront UI unchanged — it just reads the same `products` table.
+### Files to edit
 
-### After I build it
+- `src/components/NavigationBar.tsx` — full rewrite of the header markup per layouts above.
+- `src/components/AnnouncementBar.tsx` — keep messages, no structural change (still rendered above the header in `App.tsx`); confirm only one promo bar shows by removing the duplicate utility row from NavigationBar.
 
-I'll create your admin user directly in Supabase (you give me the email + a temp password, you change it on first login).
+### Out of scope
 
-### Memory updates
-
-The "no admin panel" rule in business-model memory will be updated to allow this single admin area.  
-The admin panels ui you build will be bottom of home page a unhighlighted button called "admin". by clickig it email and password requie and then admin logs in to the dashboard where admin can directly control over supabase with simple ui and ux
-
-&nbsp;
+- No new routes, no new icons added, no logo asset changes.
+- Footer, hero, and downstream pages untouched.  
+Can you do something with hero image placeholder and image as well?  
+i dont like the hero section t all
+- &nbsp;
