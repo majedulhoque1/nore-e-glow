@@ -8,7 +8,7 @@ import FeaturedProducts from '@/components/home/FeaturedProducts';
 import EditorialBanner from '@/components/home/EditorialBanner';
 import InstagramStrip from '@/components/home/InstagramStrip';
 import Testimonials from '@/components/home/Testimonials';
-import NewArrivals from '@/components/home/NewArrivals';
+
 import Footer from '@/components/Footer';
 
 const Index = () => (
@@ -17,10 +17,9 @@ const Index = () => (
     <NavigationBar />
     <HeroSection />
     <TrustBar />
-    <BuildBoxPromo />
     <FeaturedProducts />
     <EditorialBanner />
-    <NewArrivals />
+    <BuildBoxPromo />
     <Testimonials />
     <InstagramStrip />
     <Footer />
