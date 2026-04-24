@@ -17,7 +17,6 @@ const Index = () => (
     <NavigationBar />
     <HeroSection />
     <TrustBar />
-    <BuildBoxPromo />
     <FeaturedProducts />
     <EditorialBanner />
     <BuildBoxPromo />
