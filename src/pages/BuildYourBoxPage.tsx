@@ -13,6 +13,7 @@ import { SEOHead } from '@/components/SEOHead';
 import CartDrawer from '@/components/CartDrawer';
 import { BuildBoxPanel, type SelectedItem } from '@/components/mystery/BuildBoxPanel';
 import { BuildBoxProductCard } from '@/components/mystery/BuildBoxProductCard';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 interface Product {
   id: string;
