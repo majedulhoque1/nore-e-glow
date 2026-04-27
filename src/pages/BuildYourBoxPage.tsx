@@ -43,6 +43,7 @@ const BuildYourBoxPage = () => {
   const [selected, setSelected] = useState<SelectedItem[]>([]);
   const [added, setAdded] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
