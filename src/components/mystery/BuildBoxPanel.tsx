@@ -34,8 +34,8 @@ export const BuildBoxPanel = ({ items, min, max, onRemove, onAddToCart, added }:
           : 'Box full — ready!';
 
   return (
-    <div className="bg-white border border-border rounded-[2px] p-5 md:p-6">
-      <div className="flex items-center justify-between">
+    <div className="bg-white border border-border rounded-[2px] p-5 md:p-6 flex flex-col max-h-[70vh] lg:max-h-none">
+      <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <Package size={18} className="text-gold" />
           <h3 className="font-display font-medium text-lg text-bark">Your Box</h3>
@@ -46,7 +46,7 @@ export const BuildBoxPanel = ({ items, min, max, onRemove, onAddToCart, added }:
       </div>
 
       {/* Progress dots */}
-      <div className="flex gap-1.5 mt-3">
+      <div className="flex gap-1.5 mt-3 shrink-0">
         {Array.from({ length: max }).map((_, i) => (
           <div
             key={i}
@@ -57,10 +57,10 @@ export const BuildBoxPanel = ({ items, min, max, onRemove, onAddToCart, added }:
         ))}
       </div>
 
-      <p className="font-body text-xs text-bark-muted mt-2 italic">{hint}</p>
+      <p className="font-body text-xs text-bark-muted mt-2 italic shrink-0">{hint}</p>
 
-      {/* Selected items */}
-      <div className="mt-4 min-h-[80px]">
+      {/* Selected items — scrolls when overflowing */}
+      <div className="mt-4 min-h-[80px] flex-1 overflow-y-auto -mx-1 px-1">
         <AnimatePresence>
           {items.length === 0 ? (
             <div className="border border-dashed border-border rounded-[2px] py-8 text-center">
@@ -96,43 +96,45 @@ export const BuildBoxPanel = ({ items, min, max, onRemove, onAddToCart, added }:
         </AnimatePresence>
       </div>
 
-      {/* Pricing */}
-      {items.length > 0 && (
-        <div className="mt-5 pt-4 border-t border-border space-y-2">
-          <div className="flex justify-between font-body text-sm text-bark-mid">
-            <span>Subtotal</span>
-            <span>৳{subtotal}</span>
-          </div>
-          {discount > 0 && (
-            <div className="flex justify-between font-body text-sm">
-              <span className="text-gold inline-flex items-center gap-1">
-                <Sparkles size={12} /> Bundle discount (10%)
-              </span>
-              <span className="text-gold font-medium">−৳{discount}</span>
+      {/* Pricing + CTA — pinned at bottom */}
+      <div className="shrink-0">
+        {items.length > 0 && (
+          <div className="mt-5 pt-4 border-t border-border space-y-2">
+            <div className="flex justify-between font-body text-sm text-bark-mid">
+              <span>Subtotal</span>
+              <span>৳{subtotal}</span>
             </div>
-          )}
-          <div className="flex justify-between items-baseline pt-2 border-t border-border">
-            <span className="font-display font-medium text-base text-bark">Total</span>
-            <span className="font-display font-semibold text-xl text-gold">৳{total}</span>
+            {discount > 0 && (
+              <div className="flex justify-between font-body text-sm">
+                <span className="text-gold inline-flex items-center gap-1">
+                  <Sparkles size={12} /> Bundle discount (10%)
+                </span>
+                <span className="text-gold font-medium">−৳{discount}</span>
+              </div>
+            )}
+            <div className="flex justify-between items-baseline pt-2 border-t border-border">
+              <span className="font-display font-medium text-base text-bark">Total</span>
+              <span className="font-display font-semibold text-xl text-gold">৳{total}</span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <button
-        onClick={onAddToCart}
-        disabled={items.length < min || added}
-        className={`mt-5 w-full h-12 font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] transition-all duration-200 active:scale-[0.97] ${
-          items.length < min
-            ? 'bg-bark-muted/20 text-bark-muted cursor-not-allowed'
-            : 'bg-gold text-bark hover:bg-gold-dark hover:-translate-y-px'
-        }`}
-      >
-        {added ? '✓ Added to Cart' : items.length < min ? `Pick ${min - items.length} more` : `Add Custom Box — ৳${total}`}
-      </button>
+        <button
+          onClick={onAddToCart}
+          disabled={items.length < min || added}
+          className={`mt-5 w-full h-12 font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] transition-all duration-200 active:scale-[0.97] ${
+            items.length < min
+              ? 'bg-bark-muted/20 text-bark-muted cursor-not-allowed'
+              : 'bg-gold text-bark hover:bg-gold-dark hover:-translate-y-px'
+          }`}
+        >
+          {added ? '✓ Added to Cart' : items.length < min ? `Pick ${min - items.length} more` : `Add Custom Box — ৳${total}`}
+        </button>
 
-      <p className="font-body text-[10px] text-bark-muted mt-3 text-center leading-relaxed">
-        Free delivery within Dhaka · No returns on custom boxes
-      </p>
+        <p className="font-body text-[10px] text-bark-muted mt-3 text-center leading-relaxed">
+          Free delivery within Dhaka · No returns on custom boxes
+        </p>
+      </div>
     </div>
   );
 };
