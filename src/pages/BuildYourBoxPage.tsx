@@ -13,6 +13,7 @@ import { SEOHead } from '@/components/SEOHead';
 import CartDrawer from '@/components/CartDrawer';
 import { BuildBoxPanel, type SelectedItem } from '@/components/mystery/BuildBoxPanel';
 import { BuildBoxProductCard } from '@/components/mystery/BuildBoxProductCard';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 interface Product {
   id: string;
@@ -42,6 +43,7 @@ const BuildYourBoxPage = () => {
   const [selected, setSelected] = useState<SelectedItem[]>([]);
   const [added, setAdded] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -210,19 +212,67 @@ const BuildYourBoxPage = () => {
         </div>
       </section>
 
-      {/* Mobile bottom panel */}
+      {/* Mobile summary bar — compact, opens full panel in sheet */}
       <div className="lg:hidden sticky bottom-0 z-20 bg-white border-t border-border shadow-[0_-4px_20px_rgba(28,25,23,0.08)]">
-        <div className="px-4 py-4">
-          <BuildBoxPanel
-            items={selected}
-            min={MIN_ITEMS}
-            max={MAX_ITEMS}
-            onRemove={(id) => setSelected(prev => prev.filter(s => s.id !== id))}
-            onAddToCart={handleAddToCart}
-            added={added}
-          />
+        <div className="px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={() => setMobilePanelOpen(true)}
+            className="flex items-center gap-2.5 shrink-0"
+            aria-label="View your box"
+          >
+            <div className="relative">
+              <Package size={22} className="text-bark" strokeWidth={1.4} />
+              {selected.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-gold text-bark text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                  {selected.length}
+                </span>
+              )}
+            </div>
+            <div className="text-left leading-tight">
+              <p className="font-display text-sm text-bark">Your Box</p>
+              <p className="font-body text-[10px] text-bark-muted">{selected.length}/{MAX_ITEMS} · view</p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => {
+              if (selected.length >= MIN_ITEMS) handleAddToCart();
+              else setMobilePanelOpen(true);
+            }}
+            disabled={added}
+            className={`flex-1 h-11 font-body font-medium text-xs uppercase tracking-[0.1em] rounded-[2px] transition-all active:scale-[0.97] ${
+              selected.length < MIN_ITEMS
+                ? 'bg-bark text-ivory'
+                : 'bg-gold text-bark hover:bg-gold-dark'
+            }`}
+          >
+            {added
+              ? '✓ Added'
+              : selected.length < MIN_ITEMS
+                ? `Pick ${MIN_ITEMS - selected.length} more`
+                : `Add Box — ৳${selected.reduce((s, i) => s + i.price, 0) - Math.round(selected.reduce((s, i) => s + i.price, 0) * 0.1)}`}
+          </button>
         </div>
       </div>
+
+      {/* Mobile full-panel sheet */}
+      <Sheet open={mobilePanelOpen} onOpenChange={setMobilePanelOpen}>
+        <SheetContent side="bottom" className="p-0 bg-transparent border-0 max-h-[85vh] rounded-t-[4px] overflow-hidden">
+          <div className="bg-white p-4 max-h-[85vh] overflow-y-auto">
+            <BuildBoxPanel
+              items={selected}
+              min={MIN_ITEMS}
+              max={MAX_ITEMS}
+              onRemove={(id) => setSelected(prev => prev.filter(s => s.id !== id))}
+              onAddToCart={() => {
+                handleAddToCart();
+                setMobilePanelOpen(false);
+              }}
+              added={added}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <Footer />
       <WhatsAppFAB />
