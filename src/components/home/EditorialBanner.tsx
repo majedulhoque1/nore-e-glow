@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 const EditorialBanner = () => (
   <section className="relative bg-noir overflow-hidden">
     {/* Decorative numeral */}
-    <span className="absolute top-6 right-8 numeral text-ivory/8 select-none pointer-events-none hidden md:block" style={{ fontSize: '12rem', opacity: 0.06 }}>02</span>
+    <span className="absolute top-6 right-8 numeral text-ivory/8 select-none pointer-events-none hidden md:block" style={{ fontSize: '12rem', opacity: 0.06 }}>​</span>
 
     <motion.div
       initial={{ opacity: 0 }}
@@ -24,7 +24,7 @@ const EditorialBanner = () => (
           transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-3"
         >
-          <span className="numeral text-gold text-xl md:text-2xl">02</span>
+          <span className="numeral text-gold text-xl md:text-2xl">​</span>
           <span className="font-body text-[10px] md:text-[11px] uppercase tracking-[0.28em] text-gold">
             Phone Charms · Spotlight
           </span>
