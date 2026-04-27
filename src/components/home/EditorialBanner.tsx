@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 const EditorialBanner = () => (
   <section className="relative bg-noir overflow-hidden">
     {/* Decorative numeral */}
-    <span className="absolute top-6 right-8 numeral text-ivory/8 select-none pointer-events-none hidden md:block" style={{ fontSize: '12rem', opacity: 0.06 }}>02</span>
+    <span className="absolute top-6 right-8 numeral text-ivory/8 select-none pointer-events-none hidden md:block" style={{ fontSize: '12rem', opacity: 0.06 }}>​</span>
 
     <motion.div
       initial={{ opacity: 0 }}
