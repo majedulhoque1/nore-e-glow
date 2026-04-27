@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
     >
       <SectionHeading
         eyebrow="Most loved"
-        numeral="03"
+        numeral="​"
         title={<>Bestsellers,<br /><span className="italic text-gold">handpicked.</span></>}
         align="left"
         subtitle="The pieces our community comes back for, again and again."
