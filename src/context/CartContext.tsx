@@ -12,7 +12,6 @@ export interface CartItem {
   // Mystery box fields
   isMystery?: boolean;
   campaignId?: string;
-  couponCode?: string;
   // Gift wrap fields
   isGift?: boolean;
   giftRecipientName?: string;

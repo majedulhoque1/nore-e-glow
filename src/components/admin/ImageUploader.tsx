@@ -11,6 +11,14 @@ type Props = {
 };
 
 const BUCKET = 'product-images';
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // keep in sync with bucket file_size_limit
+const ALLOWED_TYPES: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/avif': 'avif',
+  'image/gif': 'gif',
+};
 
 const extractPath = (url: string): string | null => {
   const marker = `/object/public/${BUCKET}/`;
@@ -27,7 +35,15 @@ const ImageUploader = ({ productId, images, onChange }: Props) => {
     setUploading(true);
     const uploaded: string[] = [];
     for (const file of Array.from(files)) {
-      const ext = file.name.split('.').pop() || 'jpg';
+      const ext = ALLOWED_TYPES[file.type];
+      if (!ext) {
+        toast.error(`${file.name}: only JPEG, PNG, WebP, AVIF or GIF images are allowed`);
+        continue;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error(`${file.name}: file is larger than 5 MB`);
+        continue;
+      }
       const path = `products/${productId}/${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
         cacheControl: '3600',

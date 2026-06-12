@@ -119,9 +119,12 @@ export type Database = {
       mystery_box_orders: {
         Row: {
           address: string
+          box_quantity: number
           campaign_id: string | null
+          client_ip: string | null
           coupon_code: string | null
           created_at: string | null
+          extra_items: Json | null
           customer_name: string
           customer_phone: string
           delivered_at: string | null
@@ -144,9 +147,12 @@ export type Database = {
         }
         Insert: {
           address: string
+          box_quantity?: number
           campaign_id?: string | null
+          client_ip?: string | null
           coupon_code?: string | null
           created_at?: string | null
+          extra_items?: Json | null
           customer_name: string
           customer_phone: string
           delivered_at?: string | null
@@ -169,9 +175,12 @@ export type Database = {
         }
         Update: {
           address?: string
+          box_quantity?: number
           campaign_id?: string | null
+          client_ip?: string | null
           coupon_code?: string | null
           created_at?: string | null
+          extra_items?: Json | null
           customer_name?: string
           customer_phone?: string
           delivered_at?: string | null
@@ -330,6 +339,37 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      place_order: {
+        Args: {
+          p_items: Json
+          p_customer_name: string
+          p_customer_phone: string
+          p_address: string
+          p_district: string
+          p_upazila: string
+          p_note?: string | null
+        }
+        Returns: Json
+      }
+      place_mystery_order: {
+        Args: {
+          p_campaign_id: string | null
+          p_custom_box_item_ids: string[] | null
+          p_box_quantity: number
+          p_is_gift: boolean
+          p_gift_recipient_name: string | null
+          p_gift_message: string | null
+          p_gift_wrap_type: string
+          p_gift_handwritten: boolean
+          p_extra_items: Json | null
+          p_customer_name: string
+          p_customer_phone: string
+          p_address: string
+          p_district: string
+          p_upazila: string
+        }
+        Returns: Json
       }
     }
     Enums: {

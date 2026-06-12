@@ -15,7 +15,6 @@ interface Campaign {
   id: string;
   name: string;
   price: number;
-  coupon_code: string;
   coupon_amount: number;
   coupon_expires_days: number | null;
   description: string | null;
@@ -29,9 +28,10 @@ const SurpriseMysteryPage = () => {
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
+    // Explicit columns: coupon_code stays server-side (sent after delivery).
     supabase
       .from('mystery_box_campaigns')
-      .select('*')
+      .select('id,name,price,coupon_amount,coupon_expires_days,description,status')
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle()
@@ -56,7 +56,6 @@ const SurpriseMysteryPage = () => {
       slug: 'mystery-collection',
       isMystery: true,
       campaignId: campaign.id,
-      couponCode: campaign.coupon_code,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
@@ -198,10 +197,10 @@ const SurpriseMysteryPage = () => {
                   <Gift size={14} className="text-gold" />
                   <span>Total: ৳{price + 60} – ৳{price + 120}</span>
                 </div>
-                {campaign?.coupon_code && (
+                {(campaign?.coupon_amount ?? 0) > 0 && (
                   <div className="flex items-center gap-2 font-body text-sm text-bark-mid">
                     <Tag size={14} className="text-gold" />
-                    <span>Coupon: <span className="font-semibold text-bark">{campaign.coupon_code}</span></span>
+                    <span>Includes a ৳{campaign?.coupon_amount} coupon — code revealed after delivery</span>
                   </div>
                 )}
               </div>

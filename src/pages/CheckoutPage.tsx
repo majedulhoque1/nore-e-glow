@@ -77,58 +77,57 @@ const CheckoutPage = () => {
     setSubmitting(true);
     setSubmitError('');
 
-    const orderNumber = 'NR-' + Date.now().toString().slice(-6);
-    const charge = district === 'Dhaka' ? 60 : 120;
-    const finalTotal = subtotal + giftCost + charge;
-
-    let error;
+    // Prices, discounts, delivery and totals are computed server-side from
+    // the products/campaigns tables; only ids and quantities are sent.
+    let result;
     if (mysteryItem) {
-      // Route mystery box orders (with optional gift) to the dedicated table
-      const res = await supabase.from('mystery_box_orders').insert({
-        order_number: orderNumber,
-        campaign_id: mysteryItem.campaignId ?? null,
-        coupon_code: mysteryItem.couponCode ?? null,
-        delivery_charge: charge,
-        total: finalTotal,
-        customer_name: name.trim(),
-        customer_phone: phone.trim(),
-        address: address.trim(),
-        district,
-        upazila: upazila.trim(),
-        is_gift: !!mysteryItem.isGift,
-        gift_recipient_name: mysteryItem.isGift ? (mysteryItem.giftRecipientName ?? null) : null,
-        gift_message: mysteryItem.isGift ? (mysteryItem.giftMessage ?? null) : null,
-        gift_wrap_type: mysteryItem.giftWrapType ?? 'kraft',
-        gift_handwritten: mysteryItem.giftHandwritten ?? true,
-        gift_wrap_cost: giftCost,
-        items_packed: (mysteryItem.isCustomBox && mysteryItem.customBoxItems
-          ? mysteryItem.customBoxItems
-          : null) as unknown as never,
+      const extraItems = items
+        .filter(i => !i.isMystery)
+        .map(i => ({ id: i.id, quantity: i.quantity }));
+      result = await supabase.rpc('place_mystery_order', {
+        p_campaign_id: mysteryItem.isCustomBox ? null : (mysteryItem.campaignId ?? null),
+        p_custom_box_item_ids: mysteryItem.isCustomBox && mysteryItem.customBoxItems
+          ? mysteryItem.customBoxItems.map(c => c.id)
+          : null,
+        p_box_quantity: mysteryItem.quantity,
+        p_is_gift: !!mysteryItem.isGift,
+        p_gift_recipient_name: mysteryItem.isGift ? (mysteryItem.giftRecipientName ?? null) : null,
+        p_gift_message: mysteryItem.isGift ? (mysteryItem.giftMessage ?? null) : null,
+        p_gift_wrap_type: mysteryItem.giftWrapType ?? 'kraft',
+        p_gift_handwritten: mysteryItem.giftHandwritten ?? true,
+        p_extra_items: extraItems.length > 0 ? extraItems : null,
+        p_customer_name: name.trim(),
+        p_customer_phone: phone.trim(),
+        p_address: address.trim(),
+        p_district: district,
+        p_upazila: upazila.trim(),
       });
-      error = res.error;
     } else {
-      const res = await supabase.from('orders').insert({
-        order_number: orderNumber,
-        items: items.map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity, image: i.image })),
-        subtotal,
-        delivery_charge: charge,
-        total: finalTotal,
-        customer_name: name.trim(),
-        customer_phone: phone.trim(),
-        address: address.trim(),
-        district,
-        upazila: upazila.trim(),
-        note: note.trim() || null,
+      result = await supabase.rpc('place_order', {
+        p_items: items.map(i => ({ id: i.id, quantity: i.quantity })),
+        p_customer_name: name.trim(),
+        p_customer_phone: phone.trim(),
+        p_address: address.trim(),
+        p_district: district,
+        p_upazila: upazila.trim(),
+        p_note: note.trim() || null,
       });
-      error = res.error;
     }
 
-    if (error) {
-      setSubmitError('Something went wrong. Please try again.');
+    if (result.error || !result.data) {
+      const msg = result.error?.message ?? '';
+      setSubmitError(
+        msg.includes('rate_limited')
+          ? 'Too many orders placed recently. Please wait a bit and try again.'
+          : msg.includes('campaign_inactive')
+            ? 'This mystery box drop has ended. Please refresh and try again.'
+            : 'Something went wrong. Please try again.'
+      );
       setSubmitting(false);
       return;
     }
 
+    const orderNumber = (result.data as { order_number: string }).order_number;
     clearCart();
     navigate('/order-success', { state: { orderNumber } });
   };
