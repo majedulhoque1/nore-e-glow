@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { trackAddToCart } from '@/lib/analytics';
 
 export type GiftWrapType = 'kraft' | 'gold' | 'burgundy';
 
@@ -41,6 +42,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [items, setItems] = useState<CartItem[]>([]);
 
   const addItem = useCallback((product: Omit<CartItem, 'quantity'>, qty = 1) => {
+    trackAddToCart(product, qty);
     setItems(prev => {
       const existing = prev.find(i => i.id === product.id);
       if (existing) {

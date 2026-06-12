@@ -19,7 +19,9 @@ import AdminProductsList from "./pages/admin/AdminProductsList.tsx";
 import AdminProductEdit from "./pages/admin/AdminProductEdit.tsx";
 import AdminBulkPrices from "./pages/admin/AdminBulkPrices.tsx";
 import AdminChangePassword from "./pages/admin/AdminChangePassword.tsx";
+import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
 import AdminGuard from "./components/admin/AdminGuard.tsx";
+import { trackPageview } from "@/lib/analytics";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,14 @@ const ScrollToTop = () => {
   return null;
 };
 
+const AnalyticsTracker = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    trackPageview(pathname);
+  }, [pathname]);
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -38,6 +48,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <AnalyticsTracker />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/shop" element={<ShopPage />} />
@@ -54,6 +65,7 @@ const App = () => (
             <Route path="/admin/products/new" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
             <Route path="/admin/products/:id" element={<AdminGuard><AdminProductEdit /></AdminGuard>} />
             <Route path="/admin/change-password" element={<AdminGuard><AdminChangePassword /></AdminGuard>} />
+            <Route path="/admin/analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

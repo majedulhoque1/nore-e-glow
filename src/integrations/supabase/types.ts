@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          path: string | null
+          product_id: string | null
+          product_slug: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          path?: string | null
+          product_id?: string | null
+          product_slug?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          path?: string | null
+          product_id?: string | null
+          product_slug?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           display_order: number | null
@@ -333,6 +374,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_analytics_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_top_products: {
+        Args: {
+          _event_type?: string
+          _days?: number
+          _limit?: number
+        }
+        Returns: {
+          product_id: string | null
+          product_slug: string | null
+          product_name: string | null
+          product_image: string | null
+          event_count: number
+        }[]
+      }
+      get_visitors_timeseries: {
+        Args: {
+          _days?: number
+        }
+        Returns: {
+          day: string
+          visitors: number
+          pageviews: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

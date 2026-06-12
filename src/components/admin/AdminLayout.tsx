@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Package, DollarSign, Plus, KeyRound, Menu, ExternalLink } from 'lucide-react';
+import { LogOut, Package, DollarSign, Plus, KeyRound, Menu, ExternalLink, BarChart3 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,7 @@ import {
 const navLinks = [
   { to: '/admin', label: 'Products', icon: Package, end: true },
   { to: '/admin/bulk-prices', label: 'Bulk prices', icon: DollarSign },
+  { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/admin/products/new', label: 'New product', icon: Plus },
   { to: '/admin/change-password', label: 'Password', icon: KeyRound },
 ];

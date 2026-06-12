@@ -13,6 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/context/CartContext';
 import { SEOHead } from '@/components/SEOHead';
+import { trackProductView } from '@/lib/analytics';
 
 interface Product {
   id: string;
@@ -187,6 +188,7 @@ const ProductPage = () => {
         }
         setProduct(data as Product);
         setLoading(false);
+        trackProductView(data as Product);
 
         supabase
           .from('products')
