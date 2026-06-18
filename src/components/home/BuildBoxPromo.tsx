@@ -74,12 +74,6 @@ const BuildBoxPromo = () => {
                 Start Building
                 <ArrowRight size={14} className="ml-1" />
               </Link>
-              <Link
-                to="/mystery-collection"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-ivory/30 text-ivory font-display text-sm rounded-[2px] hover:bg-ivory/10 transition-colors"
-              >
-                Learn More
-              </Link>
             </div>
           </motion.div>
 

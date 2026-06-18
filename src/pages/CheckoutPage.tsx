@@ -66,7 +66,7 @@ const CheckoutPage = () => {
   const deliveryCharge = district ? (district === 'Dhaka' ? 60 : 120) : 0;
 
   const mysteryItem = items.find(i => i.isMystery);
-  const giftCost = mysteryItem?.isGift ? (mysteryItem.giftCost ?? 50) : 0;
+  const giftCost = (mysteryItem?.isGift && mysteryItem?.giftWrapPaper) ? 50 : 0;
   const total = subtotal + giftCost + deliveryCharge;
 
   const handleSubmit = async () => {
@@ -116,12 +116,15 @@ const CheckoutPage = () => {
 
     if (result.error || !result.data) {
       const msg = result.error?.message ?? '';
+      const soldOut = msg.match(/out_of_stock:(.+)$/);
       setSubmitError(
-        msg.includes('rate_limited')
-          ? 'Too many orders placed recently. Please wait a bit and try again.'
-          : msg.includes('campaign_inactive')
-            ? 'This mystery box drop has ended. Please refresh and try again.'
-            : 'Something went wrong. Please try again.'
+        soldOut
+          ? `Sorry — "${soldOut[1].trim()}" just sold out. Please remove it from your cart and try again.`
+          : msg.includes('rate_limited')
+            ? 'Too many orders placed recently. Please wait a bit and try again.'
+            : msg.includes('campaign_inactive')
+              ? 'This mystery box drop has ended. Please refresh and try again.'
+              : 'Something went wrong. Please try again.'
       );
       setSubmitting(false);
       return;
@@ -276,7 +279,7 @@ const CheckoutPage = () => {
                   <div>
                     <span>Gift wrap</span>
                     <p className="font-body text-[10px] text-bark-muted mt-0.5">
-                      {mysteryItem?.giftWrapType ?? 'kraft'} paper · {mysteryItem?.giftHandwritten ? 'handwritten' : 'printed'} message
+                      Wrapping paper included
                     </p>
                   </div>
                   <span className="text-gold font-medium">+৳{giftCost}</span>

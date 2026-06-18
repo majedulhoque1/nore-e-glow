@@ -113,8 +113,8 @@ const BuildYourBoxPage = () => {
       <NavigationBar />
 
       <div className="max-w-[1400px] mx-auto px-6 pt-6">
-        <Link to="/mystery-collection" className="inline-flex items-center gap-1.5 font-body text-xs text-bark-muted hover:text-gold transition-colors">
-          <ArrowLeft size={14} /> Back to Mystery Collection
+        <Link to="/" className="inline-flex items-center gap-1.5 font-body text-xs text-bark-muted hover:text-gold transition-colors">
+          <ArrowLeft size={14} /> Back to Home
         </Link>
       </div>
 

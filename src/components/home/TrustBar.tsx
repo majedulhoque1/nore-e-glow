@@ -1,10 +1,9 @@
-import { Truck, ShieldCheck, RefreshCw, MessageCircle } from 'lucide-react';
+import { Truck, ShieldCheck, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const items = [
   { icon: Truck, title: 'Cash on Delivery', sub: 'Pay when it arrives' },
   { icon: ShieldCheck, title: 'Hand-finished', sub: 'Small-batch quality' },
-  { icon: RefreshCw, title: '3-Day Exchange', sub: 'Easy & no-fuss' },
   { icon: MessageCircle, title: 'WhatsApp Care', sub: 'Replies in minutes' },
 ];
 
@@ -16,7 +15,7 @@ const TrustBar = () => (
     transition={{ duration: 0.6 }}
     className="hidden md:block bg-ivory-warm border-y border-gold/15 py-8"
   >
-    <div className="max-w-[1400px] mx-auto px-8 grid grid-cols-4 gap-6 items-center">
+    <div className="max-w-[1400px] mx-auto px-8 grid grid-cols-3 gap-6 items-center">
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-4 group">
           <div className="w-11 h-11 rounded-full border border-gold/40 flex items-center justify-center shrink-0 group-hover:bg-gold/10 transition-colors">

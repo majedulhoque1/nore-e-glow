@@ -15,9 +15,10 @@ interface ProductCardProps {
   is_new_arrival?: boolean;
   index?: number;
   ribbon?: string;
+  stock_qty?: number | null;
 }
 
-const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_arrival, index = 0, ribbon }: ProductCardProps) => {
+const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_arrival, index = 0, ribbon, stock_qty }: ProductCardProps) => {
   const navigate = useNavigate();
   const { has, toggle } = useWishlist();
   const { addItem } = useCart();
@@ -27,10 +28,12 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
   const primary = images?.[0] || '/placeholder.svg';
   const secondary = images?.[1];
   const savings = compare_at_price && compare_at_price > price ? compare_at_price - price : 0;
+  // null/undefined stock = untracked (unlimited); <= 0 = sold out.
+  const soldOut = stock_qty !== null && stock_qty !== undefined && stock_qty <= 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (added) return;
+    if (added || soldOut) return;
     addItem({ id, name, price, image: primary, slug });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
@@ -66,6 +69,15 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
           />
         )}
 
+        {/* Sold-out overlay */}
+        {soldOut && (
+          <div className="absolute inset-0 z-[2] bg-ivory/55 backdrop-blur-[1px] flex items-center justify-center">
+            <span className="bg-bark/90 text-ivory font-body text-[10px] px-3 py-1.5 uppercase tracking-[0.2em]">
+              Sold out
+            </span>
+          </div>
+        )}
+
         {/* Top-left badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-[2]">
           {ribbon && (
@@ -97,13 +109,15 @@ const ProductCard = ({ id, name, slug, price, compare_at_price, images, is_new_a
           />
         </button>
 
-        {/* Quick-add (desktop only) */}
-        <button
-          onClick={handleQuickAdd}
-          className="hidden md:flex absolute left-3 right-3 bottom-3 h-10 items-center justify-center gap-2 bg-bark/95 backdrop-blur text-ivory font-body text-[11px] uppercase tracking-[0.18em] rounded-[2px] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 hover:bg-gold hover:text-bark z-[2]"
-        >
-          {added ? <><Check size={14} /> Added</> : <><Plus size={14} /> Quick Add</>}
-        </button>
+        {/* Quick-add (desktop only) — hidden when sold out */}
+        {!soldOut && (
+          <button
+            onClick={handleQuickAdd}
+            className="hidden md:flex absolute left-3 right-3 bottom-3 h-10 items-center justify-center gap-2 bg-bark/95 backdrop-blur text-ivory font-body text-[11px] uppercase tracking-[0.18em] rounded-[2px] opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400 hover:bg-gold hover:text-bark z-[2]"
+          >
+            {added ? <><Check size={14} /> Added</> : <><Plus size={14} /> Quick Add</>}
+          </button>
+        )}
       </div>
 
       <div className="pt-4 pb-2">

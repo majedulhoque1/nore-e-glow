@@ -40,11 +40,27 @@ const Footer = () => {
             <span className="font-display text-2xl text-ivory">Nore'e</span>
           </div>
           <p className="font-body text-sm text-bark-muted mt-3 max-w-[200px] font-light">
-            Handcrafted jewelry, delivered with care. Dhaka, Bangladesh.
+            Dhaka, Bangladesh.
           </p>
           <div className="flex gap-3 mt-4">
-            <a href="#" className="text-gold hover:text-gold-light transition-colors" aria-label="Instagram"><Instagram size={18} /></a>
-            <a href="#" className="text-gold hover:text-gold-light transition-colors" aria-label="Facebook"><Facebook size={18} /></a>
+            <a
+              href="https://www.instagram.com/noreejewellery/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:text-gold-light transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram size={18} />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=100066478733144"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:text-gold-light transition-colors"
+              aria-label="Facebook"
+            >
+              <Facebook size={18} />
+            </a>
           </div>
         </div>
 
@@ -58,7 +74,6 @@ const Footer = () => {
               { label: 'Bracelets', href: '/category/bracelets' },
               { label: 'Phone Charms', href: '/category/phone-charms' },
               { label: 'New Arrivals', href: '/category/new-arrivals' },
-              { label: 'Mystery Box ✦', href: '/mystery-collection' },
             ].map(l => (
               <Link key={l.label} to={l.href} className="font-body text-sm text-bark-muted hover:text-gold transition-colors">{l.label}</Link>
             ))}
@@ -69,7 +84,7 @@ const Footer = () => {
         <div>
           <h4 className="font-body font-medium text-xs uppercase tracking-[0.15em] text-bark-muted mb-4">Help</h4>
           <div className="flex flex-col gap-2.5">
-            {['How to Order', 'Delivery Info', 'Exchange Policy', 'Contact Us'].map(l => (
+            {['How to Order', 'Delivery Info', 'Contact Us'].map(l => (
               <span key={l} className="font-body text-sm text-bark-muted hover:text-gold transition-colors cursor-pointer">{l}</span>
             ))}
           </div>

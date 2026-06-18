@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingBag, Menu, X, Heart } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, Heart, MessageCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartDrawer from './CartDrawer';
 import SearchModal from './SearchModal';
@@ -14,10 +14,9 @@ const navLinks = [
   { label: 'New', href: '/category/new-arrivals' },
 ];
 
-const discoverLink = { label: 'Mystery Collection', href: '/mystery-collection' };
-
 const NavigationBar = () => {
   const { totalItems } = useCart();
+  const whatsappPhone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801700000000';
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -67,7 +66,6 @@ const NavigationBar = () => {
             {navLinks.map(link => (
               <NavItem key={link.href} {...link} />
             ))}
-            <NavItem {...discoverLink} glyph="✦" accent />
           </nav>
 
           {/* Center — wordmark */}
@@ -79,6 +77,15 @@ const NavigationBar = () => {
 
           {/* Right — icon cluster */}
           <div className="flex items-center justify-end gap-5">
+            <a
+              href={`https://wa.me/${whatsappPhone}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="text-bark-mid hover:text-gold transition-colors p-1"
+            >
+              <MessageCircle size={18} strokeWidth={1.5} />
+            </a>
             <button
               aria-label="Search"
               onClick={() => setSearchOpen(true)}
@@ -134,6 +141,15 @@ const NavigationBar = () => {
             </span>
           </Link>
           <div className="flex items-center gap-4 justify-self-end">
+            <a
+              href={`https://wa.me/${whatsappPhone}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="text-bark-mid p-1"
+            >
+              <MessageCircle size={18} strokeWidth={1.6} />
+            </a>
             <button
               aria-label="Search"
               onClick={() => setSearchOpen(true)}
@@ -210,22 +226,6 @@ const NavigationBar = () => {
                       </Link>
                     ))}
                   </div>
-                </div>
-
-                <div className="rule-gold opacity-40" />
-
-                <div>
-                  <div className="font-body text-[10px] uppercase tracking-[0.25em] text-bark-muted mb-4">
-                    Discover
-                  </div>
-                  <Link
-                    to={discoverLink.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="font-display italic text-[24px] text-gold hover:text-gold-dark transition-colors leading-none inline-flex items-center gap-2"
-                  >
-                    <span className="text-gold">✦</span>
-                    {discoverLink.label}
-                  </Link>
                 </div>
               </div>
             </motion.div>

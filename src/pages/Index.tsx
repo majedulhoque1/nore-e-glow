@@ -2,10 +2,10 @@ import NavigationBar from '@/components/NavigationBar';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
 import HeroSection from '@/components/home/HeroSection';
+import MarqueeBar from '@/components/home/MarqueeBar';
 import TrustBar from '@/components/home/TrustBar';
 import BuildBoxPromo from '@/components/home/BuildBoxPromo';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
-import EditorialBanner from '@/components/home/EditorialBanner';
 import InstagramStrip from '@/components/home/InstagramStrip';
 import Testimonials from '@/components/home/Testimonials';
 
@@ -16,9 +16,9 @@ const Index = () => (
     <AnnouncementBar />
     <NavigationBar />
     <HeroSection />
+    <MarqueeBar />
     <TrustBar />
     <FeaturedProducts />
-    <EditorialBanner />
     <BuildBoxPromo />
     <Testimonials />
     <InstagramStrip />

@@ -19,6 +19,7 @@ export interface CartItem {
   giftMessage?: string;
   giftWrapType?: GiftWrapType;
   giftHandwritten?: boolean;
+  giftWrapPaper?: boolean;
   giftCost?: number;
   // Custom box fields
   isCustomBox?: boolean;

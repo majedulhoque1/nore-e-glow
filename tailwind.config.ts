@@ -126,7 +126,7 @@ export default {
         "fade-in-up": "fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "scale-check": "scale-check 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
         "ken-burns": "ken-burns 18s ease-out forwards",
-        "marquee-x": "marquee-x 40s linear infinite",
+        "marquee-x": "marquee-x 7s linear infinite",
         "shimmer": "shimmer 3s linear infinite",
         "drift-up": "drift-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },

@@ -15,15 +15,14 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   const navigate = useNavigate();
 
   const mysteryItem = items.find(i => i.isMystery);
-  const giftCost = mysteryItem?.isGift ? (mysteryItem.giftCost ?? 50) : 0;
+  const giftCost = (mysteryItem?.isGift && mysteryItem?.giftWrapPaper) ? 50 : 0;
   const cartTotal = subtotal + giftCost;
 
   const giftValue: GiftData = {
     isGift: mysteryItem?.isGift ?? false,
     recipientName: mysteryItem?.giftRecipientName ?? '',
     message: mysteryItem?.giftMessage ?? '',
-    wrapType: mysteryItem?.giftWrapType ?? 'kraft',
-    handwritten: mysteryItem?.giftHandwritten ?? true,
+    wrapPaper: mysteryItem?.giftWrapPaper ?? false,
   };
 
   const handleGiftChange = (data: GiftData) => {
@@ -32,9 +31,8 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
       isGift: data.isGift,
       giftRecipientName: data.recipientName || undefined,
       giftMessage: data.message || undefined,
-      giftWrapType: data.wrapType,
-      giftHandwritten: data.handwritten,
-      giftCost: data.isGift ? 50 : 0,
+      giftWrapPaper: data.wrapPaper,
+      giftCost: data.isGift && data.wrapPaper ? 50 : 0,
     });
   };
 

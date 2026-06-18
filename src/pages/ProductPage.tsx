@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Minus, Plus, Loader2, Check, MessageCircle, Truck, X, ZoomIn, RefreshCw, Phone, Star } from 'lucide-react';
+import { Minus, Plus, Loader2, Check, MessageCircle, Truck, X, ZoomIn, Phone, Star } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import WhatsAppFAB from '@/components/WhatsAppFAB';
@@ -209,6 +209,7 @@ const ProductPage = () => {
 
   const handleAddToCart = useCallback(() => {
     if (!product || btnState !== 'idle') return;
+    if (product.stock_qty !== null && product.stock_qty <= 0) return;
     setBtnState('loading');
     setTimeout(() => {
       addItem({
@@ -235,6 +236,11 @@ const ProductPage = () => {
   const savingsPercent = product?.compare_at_price
     ? Math.round((1 - product.price / product.compare_at_price) * 100)
     : null;
+
+  // Stock display (DB stock_qty: null = untracked/unlimited, <=0 = sold out).
+  const stockQty = product?.stock_qty ?? null;
+  const outOfStock = stockQty !== null && stockQty <= 0;
+  const lowStock = stockQty !== null && stockQty > 0 && stockQty <= 5;
 
   if (loading) {
     return (
@@ -335,9 +341,17 @@ const ProductPage = () => {
               )}
             </div>
 
+            {outOfStock ? (
+              <p className="font-body text-sm font-medium text-crimson mt-3">Out of stock</p>
+            ) : lowStock ? (
+              <p className="font-body text-sm font-medium text-crimson mt-3">
+                Only {stockQty} left
+              </p>
+            ) : null}
+
             <div className="border-t border-gold/20 my-5" />
 
-            <div className="flex items-center border border-border rounded-sm w-fit">
+            <div className={`flex items-center border border-border rounded-sm w-fit ${outOfStock ? 'opacity-50 pointer-events-none' : ''}`}>
               <button
                 onClick={() => setQty(q => Math.max(1, q - 1))}
                 className="w-10 h-10 flex items-center justify-center text-bark hover:bg-ivory-warm transition-colors active:scale-[0.95]"
@@ -359,12 +373,16 @@ const ProductPage = () => {
 
             <button
               onClick={handleAddToCart}
-              disabled={btnState === 'loading'}
-              className="w-full h-[52px] bg-gold text-bark font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] hover:bg-gold-dark hover:-translate-y-px transition-all duration-200 mt-4 flex items-center justify-center gap-2 active:scale-[0.97] disabled:opacity-70"
+              disabled={btnState === 'loading' || outOfStock}
+              className="w-full h-[52px] bg-gold text-bark font-body font-medium text-sm uppercase tracking-[0.1em] rounded-[2px] hover:bg-gold-dark hover:-translate-y-px transition-all duration-200 mt-4 flex items-center justify-center gap-2 active:scale-[0.97] disabled:opacity-70 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
             >
-              {btnState === 'loading' && <><Loader2 size={16} className="animate-spin" /> Adding...</>}
-              {btnState === 'success' && <><Check size={16} /> Added!</>}
-              {btnState === 'idle' && 'Add to Cart'}
+              {outOfStock ? 'Out of Stock' : (
+                <>
+                  {btnState === 'loading' && <><Loader2 size={16} className="animate-spin" /> Adding...</>}
+                  {btnState === 'success' && <><Check size={16} /> Added!</>}
+                  {btnState === 'idle' && 'Add to Cart'}
+                </>
+              )}
             </button>
 
             <button
@@ -382,8 +400,8 @@ const ProductPage = () => {
                 <span className="font-body text-[11px] text-bark-mid leading-tight">Cash on Delivery</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
-                <RefreshCw size={18} className="text-gold" />
-                <span className="font-body text-[11px] text-bark-mid leading-tight">3-day Exchange</span>
+                <Check size={18} className="text-gold" />
+                <span className="font-body text-[11px] text-bark-mid leading-tight">Hand-finished</span>
               </div>
               <div className="flex flex-col items-center text-center gap-1.5">
                 <Phone size={18} className="text-gold" />
@@ -417,10 +435,10 @@ const ProductPage = () => {
               </AccordionItem>
               <AccordionItem value="delivery" className="border-b-0">
                 <AccordionTrigger className="font-body font-medium text-sm text-bark py-4 hover:text-gold hover:no-underline">
-                  Delivery &amp; Exchange
+                  Delivery
                 </AccordionTrigger>
                 <AccordionContent className="font-body font-light text-bark-mid leading-relaxed pb-4">
-                  COD delivery 2–4 business days. Exchange within 3 days.
+                  COD delivery 2–4 business days.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -490,10 +508,14 @@ const ProductPage = () => {
             </button>
             <button
               onClick={handleAddToCart}
-              disabled={btnState === 'loading'}
-              className="h-12 bg-gold text-bark font-body font-medium text-xs uppercase tracking-[0.12em] rounded-[2px] flex items-center justify-center gap-1.5 active:scale-[0.97] disabled:opacity-70"
+              disabled={btnState === 'loading' || outOfStock}
+              className="h-12 bg-gold text-bark font-body font-medium text-xs uppercase tracking-[0.12em] rounded-[2px] flex items-center justify-center gap-1.5 active:scale-[0.97] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {btnState === 'success' ? <><Check size={14} /> Added</> : <>Add to Cart · ৳{product.price * qty}</>}
+              {outOfStock
+                ? 'Out of Stock'
+                : btnState === 'success'
+                  ? <><Check size={14} /> Added</>
+                  : <>Add to Cart · ৳{product.price * qty}</>}
             </button>
           </motion.div>
         )}

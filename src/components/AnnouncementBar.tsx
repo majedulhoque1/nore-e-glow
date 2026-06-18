@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const messages = [
   'Complimentary cash-on-delivery, nationwide',
-  '3-day easy exchange on every order',
   'Order in seconds via WhatsApp',
 ];
 
@@ -25,11 +24,11 @@ const AnnouncementBar = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="font-body text-[10.5px] tracking-[0.22em] uppercase text-ivory/90 relative z-[1] flex items-center gap-3"
+          className="font-body whitespace-nowrap text-[9.5px] tracking-[0.12em] sm:text-[10.5px] sm:tracking-[0.22em] uppercase text-ivory/90 relative z-[1] flex items-center gap-2 sm:gap-3"
         >
-          <span className="text-gold text-xs">✦</span>
+          <span className="text-gold text-[10px] sm:text-xs">✦</span>
           {messages[idx]}
-          <span className="text-gold text-xs">✦</span>
+          <span className="text-gold text-[10px] sm:text-xs">✦</span>
         </motion.span>
       </AnimatePresence>
     </div>
