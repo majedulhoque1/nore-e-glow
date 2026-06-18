@@ -16,7 +16,7 @@ const navLinks = [
 
 const NavigationBar = () => {
   const { totalItems } = useCart();
-  const whatsappPhone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801700000000';
+  const whatsappPhone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801534756278';
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,7 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 
 const WhatsAppFAB = () => {
-  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801700000000';
+  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801534756278';
   return (
     <a
       href={`https://wa.me/${phone}`}

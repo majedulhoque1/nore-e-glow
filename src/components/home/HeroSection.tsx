@@ -36,7 +36,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-bark min-h-[calc(100svh-5.75rem)] md:min-h-[92vh]">
+    <section className="relative w-full overflow-hidden bg-bark min-h-[calc(100svh-3.5rem)] md:min-h-[92vh]">
       {/* ── ATMOSPHERE: the "gallery light" ground (always behind any video) ── */}
       <div className="absolute inset-0">
         {/* warm base */}
@@ -125,23 +125,6 @@ const HeroSection = () => {
             'linear-gradient(to top, rgba(28,25,23,0.9) 0%, rgba(28,25,23,0.4) 30%, transparent 58%)',
         }}
       />
-
-      {/* ── editorial corner mark (desktop) ── */}
-      <div className="hidden md:block absolute top-8 right-10 font-body text-[10px] uppercase tracking-[0.3em] text-ivory/35">
-        Still life · Nº 01
-      </div>
-
-      {/* ── editorial mark (mobile): a vertical signature anchoring the upper-right void ── */}
-      <div
-        aria-hidden
-        className="md:hidden absolute top-7 right-4 flex flex-col items-center gap-3 text-ivory/30"
-      >
-        <span className="w-1.5 h-1.5 bg-gold/70 rotate-45" />
-        <span className="vertical-text font-body text-[9px] uppercase tracking-[0.35em] leading-none">
-          Still life · Nº 01
-        </span>
-        <span className="w-px h-12 bg-gradient-to-b from-gold/40 to-transparent" />
-      </div>
 
       {/* ── CONTENT: overlaid, bottom-left ── */}
       <div className="absolute inset-0 flex items-end">

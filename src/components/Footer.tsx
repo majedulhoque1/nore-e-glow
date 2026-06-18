@@ -3,7 +3,7 @@ import { Instagram, Facebook, MessageCircle, ArrowRight } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
 const Footer = () => {
-  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801700000000';
+  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801534756278';
 
   return (
     <footer className="bg-bark text-ivory">

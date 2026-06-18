@@ -16,7 +16,7 @@ const OrderSuccessPage = () => {
 
   if (!orderNumber) return null;
 
-  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '88017XXXXXXXX';
+  const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801534756278';
 
   return (
     <div className="min-h-screen bg-ivory flex flex-col">

@@ -226,7 +226,7 @@ const ProductPage = () => {
 
   const handleWhatsApp = useCallback(() => {
     if (!product) return;
-    const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '88017XXXXXXXX';
+    const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '8801534756278';
     const msg = encodeURIComponent(
       `আমি অর্ডার করতে চাই:\n${product.name}\nমূল্য: ৳${product.price}\n\nনাম:\nঠিকানা:\nফোন:`
     );
